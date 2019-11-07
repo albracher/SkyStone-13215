@@ -23,9 +23,6 @@ public class AutonMap {
     public DcMotor motorFL = null;
     public DcMotor motorRR = null;
     public DcMotor motorRL = null;
-    public DcMotor open = null;
-    public DcMotor close = null;
-    public DcMotor intake = null;
     private double x = 0;
     private double y = 0;
 
@@ -82,44 +79,29 @@ public class AutonMap {
         motorFL = hwMap.get(DcMotor.class, "fl");
         motorRR = hwMap.get(DcMotor.class, "rr");
         motorRL = hwMap.get(DcMotor.class, "rl");
-        open = hwMap.get(DcMotor.class, "open");
-        close = hwMap.get(DcMotor.class, "close");
-        intake = hwMap.get(DcMotor.class, "ir");
 
         motorFR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
         motorFL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward
         motorRR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
         motorRL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward
-        open.setDirection(DcMotor.Direction.FORWARD);
-        close.setDirection(DcMotor.Direction.FORWARD);
-        intake.setDirection(DcMotor.Direction.REVERSE);
 
         // Sets zero power behavior to brake for more precise movement
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorRR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorRL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        open.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        close.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Resets encoder values to prevent the robot from freaking out as soon as we init
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        open.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        close.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set all motors to zero power
         motorFR.setPower(0);
         motorFL.setPower(0);
         motorRR.setPower(0);
         motorRL.setPower(0);
-        open.setPower(0);
-        close.setPower(0);
-        intake.setPower(0);
 
         // fucking gyro init hell yeet dab
     }
@@ -238,38 +220,38 @@ public class AutonMap {
         targetRR=0;
     }
 
-    public void open(double speed, double time) {
-        runtime.reset();
-        while ((runtime.seconds() < time)) {
-            telemetry.addData("Status:", "opening     Time Left: " + time, runtime.seconds());
-            telemetry.update();
-            open.setPower(speed);
-        }
-    }
-
-    public void openandclose(double speed, int numCounts){
-        int counter = 0;
-        while ((counter < numCounts)) {
-            telemetry.addData("Status:", "opening     Time Left: " + numCounts, runtime.seconds());
-            telemetry.update();
-            //YellowJacket is close
-            //NeverRest is open
-            //Run NeverRest at 82.35% to get same power
-            open.setPower(speed * 0.8);
-            close.setPower(speed);
-            counter ++;
-        }
-    }
 
 
-    public void close(double speed, double time) {
-        runtime.reset();
-        while ((runtime.seconds() < time)) {
-            telemetry.addData("Status:", "opening     Time Left: " + time, runtime.seconds());
-            telemetry.update();
-            close.setPower(speed);
-        }
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*    public void actuate(double speed, double time) {
         runtime.reset();

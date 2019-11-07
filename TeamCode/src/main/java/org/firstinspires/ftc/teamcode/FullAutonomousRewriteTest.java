@@ -27,6 +27,7 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
     public static double DRIVE_SPEED = 0.5;
 
     /*
+    tile size is 24 inches
     660 counts of encoder = 4 inches
     1 inch = 165 counts
     */
@@ -79,9 +80,6 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         robot.drive(DRIVE_SPEED, 2856);
 
 
-
-        intake(0.9, 2.25);
-
         //test intake
 /*        intake(0.5, 3);
         sleep(1000);
@@ -113,14 +111,6 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         robot.motorRR.setPower(0);
     }
 
-    public void intake(double speed, double time) {
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < time)) {
-            telemetry.addData("Status:", "Actuating", runtime.seconds());
-            telemetry.update();
-            robot.intake.setPower(speed);
-        }
-    }
 
 /*    public void actuate(double speed, double time) {
         runtime.reset();

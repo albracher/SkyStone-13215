@@ -30,7 +30,7 @@ import java.util.Locale;
 
 //*In theory* this should also be compatible with tank drive, except for the strafing parts
 
-@TeleOp(name = "DrivetrainTest", group = "TeleOp")
+@TeleOp(name = "TeleOp", group = "TeleOp")
 public class DrivetrainTest extends LinearOpMode {
     BNO055IMU imu;
 
