@@ -18,7 +18,7 @@ public class TeleOpMap {
     public Servo claw    = null;
     public static final double MID_SERVO       =  0.5 ;
     static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
-    static final double DRIVE_GEAR_REDUCTION = 1/1;     // This is < 1.0 if geared UP
+    static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_ROTATION = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;     //used to compute degrees
     public static final double M = (2 / Math.sqrt(2));
