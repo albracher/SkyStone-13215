@@ -117,8 +117,6 @@ public class TeleOpMap {
 
     public void drive(double speed, int distance) {
 
-        distance *= INCHES;
-
         // Resets encoder values so that it doesn't attempt to run to outdated values
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -170,11 +168,7 @@ public class TeleOpMap {
         targetRR=0;
     }
 
-    public void strafe(double speed, double distance) {
-
-        distance *= INCHES;
-        int input;
-        input = (int) distance;
+    public void strafe(double speed, int distance) {
 
         // Resets encoder values so that it doesn't attempt to run to outdated values
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -188,10 +182,10 @@ public class TeleOpMap {
         int targetRL;
         int targetRR;
         // Determines new target position, and pass to motor controller
-        targetFL = motorFL.getCurrentPosition() + input;
-        targetFR = motorFR.getCurrentPosition() - input;
-        targetRL = motorRL.getCurrentPosition() - input;
-        targetRR = motorRR.getCurrentPosition() + input;
+        targetFL = motorFL.getCurrentPosition() + distance;
+        targetFR = motorFR.getCurrentPosition() - distance;
+        targetRL = motorRL.getCurrentPosition() - distance;
+        targetRR = motorRR.getCurrentPosition() + distance;
         motorFL.setTargetPosition(targetFL);
         motorFR.setTargetPosition(targetFR);
         motorRL.setTargetPosition(targetRL);

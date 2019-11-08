@@ -48,11 +48,11 @@ public class BlueBuilding extends LinearOpMode {
 
         waitForStart();
 
-        robot.strafe(-DRIVE_SPEED, -3);
+        robot.strafe(-DRIVE_SPEED, -3000);
 
-        robot.strafe(DRIVE_SPEED, 3);
+        robot.strafe(DRIVE_SPEED, 3000);
 
-        robot.drive(DRIVE_SPEED, 3);
+        robot.drive(DRIVE_SPEED, 3000);
 
     }
 }
