@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TeleOpMap {
     /* Public OpMode members. */
@@ -24,8 +25,6 @@ public class TeleOpMap {
     public static final double M = (2 / Math.sqrt(2));
     static final double INCHES = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION / (WHEEL_DIAMETER_INCHES * Math.PI))*M; //calculates counts per inch
     static final double FEET = 12 * INCHES;
-    //59.41785 base inches (no mec compensation)
-    //84.02952 per inch
     int OFFSET = 0;
     public static final double DRIVE_SPEED = 0.5;
     //public ColorSensor colorSensor;//legacy code, can be removed
@@ -50,6 +49,7 @@ public class TeleOpMap {
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
+    private Telemetry telemetry;
 
     /* Constructor */
     public TeleOpMap() {
@@ -79,6 +79,7 @@ public class TeleOpMap {
         intakeL.setDirection(DcMotor.Direction.REVERSE);
         armL.setDirection(DcMotor.Direction.REVERSE);
         armR.setDirection(DcMotor.Direction.FORWARD);
+        claw.setPosition(MID_SERVO);
 
         // Set all motors to zero power
         motorFR.setPower(0);

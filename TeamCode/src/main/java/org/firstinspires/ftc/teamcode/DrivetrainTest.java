@@ -183,10 +183,9 @@ public class DrivetrainTest extends LinearOpMode {
                 clawOffset -= CLAW_SPEED;
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
-            clawOffset = Range.clip(clawOffset, -0.3, 0.3);
+            clawOffset = Range.clip(clawOffset, -0.5, 0.5);
 
             robot.claw.setPosition(robot.MID_SERVO + clawOffset);
-
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Power: " + drive + "        Turn: " + turn + "        Strafe: " + strafe + "\n" +
