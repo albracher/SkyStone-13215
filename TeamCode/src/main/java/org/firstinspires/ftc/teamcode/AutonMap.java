@@ -261,10 +261,10 @@ public class AutonMap {
 
 
 
-                motorFR.setPower(speed);
-                motorFL.setPower(-speed);
-                motorRR.setPower(speed);
-                motorRL.setPower(-speed);
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
 
             }
         } else if (direction.equals("counterclockwise") || direction.equals("ccw")) {
@@ -278,10 +278,10 @@ public class AutonMap {
                 motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                motorFR.setPower(-speed);
-                motorFL.setPower(speed);
-                motorRR.setPower(-speed);
-                motorRL.setPower(speed);
+                motorFR.setPower(speed);
+                motorFL.setPower(-speed);
+                motorRR.setPower(speed);
+                motorRL.setPower(-speed);
             }
         }
 

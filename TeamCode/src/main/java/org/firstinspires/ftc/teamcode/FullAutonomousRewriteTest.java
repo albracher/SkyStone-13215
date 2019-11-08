@@ -104,38 +104,38 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        robot.drive(0.5, 3);
-
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            sleep(500);
-            if (updatedRecognitions != null) {
-
-
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.update()
-;                    sleep(5000);
-                    x = recognition.getLabel();
-                    if(x.equals("Stone")){
-                        robot.strafe(0.5,5);
-                        if(x.equals("Stone")) {
-                            robot.strafe(0.5, 5);
-                        }
-                    }
-
-                }
-                telemetry.update();
-            }
-
-
-            // Play the audio
-            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-            robot.rotate("ccw", 0.4, 180);
+//        robot.drive(0.5, -1200);
+//
+//        if (tfod != null) {
+//            // getUpdatedRecognitions() will return null if no new information is available since
+//            // the last time that call was made.
+//            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//            sleep(500);
+//            if (updatedRecognitions != null) {
+//
+//
+//                // step through the list of recognitions and display boundary info.
+//                int i = 0;
+//                for (Recognition recognition : updatedRecognitions) {
+//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+//                    telemetry.update()
+//;                    sleep(5000);
+//                    x = recognition.getLabel();
+//                    if(x.equals("Stone")){
+//                        robot.strafe(0.5,500);
+//                        if(x.equals("Stone")) {
+//                            robot.strafe(0.5, 500);
+//                        }
+//                    }
+//
+//                }
+//                telemetry.update();
+//            }
+//
+//
+//            // Play the audio
+//            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
+//            robot.rotate("ccw", 0.4, 170);
             robot.autonclaw.setPosition(1.0);            // S4: Stop and close the claw.
             robot.autonclamp.setPosition(0.0);
             robot.autonclaw.setPosition(0.0);
