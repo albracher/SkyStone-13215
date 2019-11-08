@@ -45,16 +45,16 @@ public class AutonMap {
     private double lastangle = 0;
     private boolean ccwRotation = false;
 
-    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: Andymark Motor Encoder (40:1)
-    static final double DRIVE_GEAR_REDUCTION = 2.0/3.0;     // This is < 1.0 if geared UP
+ static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
+    static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_ROTATION = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;     //used to compute degrees
-    static final double INCHES = (COUNTS_PER_MOTOR_REV * (80/120) / (WHEEL_DIAMETER_INCHES * Math.PI)); //calculates counts per inch
+    public static final double M = (2 / Math.sqrt(2));
+    static final double INCHES = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION / (WHEEL_DIAMETER_INCHES * Math.PI))*M; //calculates counts per inch
     static final double FEET = 12 * INCHES;
     //59.41785 base inches (no mec compensation)
     //84.02952 per inch
     int OFFSET = 0;
-    public static final double M = (2 / Math.sqrt(2));
     public static final double DRIVE_SPEED = 0.5;
 
     public static final double MID_SERVO = 0.5;//legacy code, can be removed
