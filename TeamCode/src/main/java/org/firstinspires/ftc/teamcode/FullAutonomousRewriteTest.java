@@ -58,10 +58,10 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
 
-        robot.strafe(-DRIVE_SPEED, -1428);
+        robot.strafe(-DRIVE_SPEED, -3);
         robot.OFFSET-=68;
 
-        robot.strafe(DRIVE_SPEED, 2856);
+        robot.strafe(DRIVE_SPEED, 3);
         robot.OFFSET+=136;
 
         //runs loop until robot is aligned with mineral
@@ -77,7 +77,7 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         //ONE TILE IS 24 INCHES X 24 INCHES
 
         //drive to crater
-        robot.drive(DRIVE_SPEED, 2856);
+        robot.drive(DRIVE_SPEED, 3);
 
 
         //test intake
