@@ -3,6 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Point;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 /*import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;*/
@@ -29,6 +36,14 @@ public class AutonMap {
    /* private GoldAlignDetector detector;*/
     private ElapsedTime runtime = new ElapsedTime();
     private Telemetry telemetry;
+    private Orientation angles;
+
+    private BNO055IMU imu;
+    private BNO055IMU.Parameters gyroParameters;
+
+    private double heading;
+    private double lastangle = 0;
+    private boolean ccwRotation = false;
 
  static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
@@ -73,6 +88,15 @@ public class AutonMap {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
 
         // Define and Initialize Motors
         motorFR = hwMap.get(DcMotor.class, "fr");
@@ -114,6 +138,8 @@ public class AutonMap {
     }
     public void updateY(int dist){
     }
+
+
 
 
     public void drive(double speed, int distance) {
@@ -166,6 +192,61 @@ public class AutonMap {
         targetFR=0;
         targetRL=0;
         targetRR=0;
+    }
+
+    public void rotate(String direction, double speed, double angle) {
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
+        heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        heading = Math.floor(heading);
+        heading = Range.clip(heading, -180.0, 180.0);
+
+        //boolean beforeAngle = (direction.equals("cw") ? heading > angle | heading<angle);
+
+        if (direction.equals("cw") || direction.equals("clockwise")) {
+            while (Math.abs(heading) > angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+                motorFR.setPower(speed);
+                motorFL.setPower(-speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
+
+            }
+        } else if (direction.equals("counterclockwise") || direction.equals("ccw")) {
+            while (heading < angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(speed);
+                motorRL.setPower(-speed);
+            }
+        }
+
+        lastangle = heading;
     }
 
     public void strafe(double speed, int distance) {
