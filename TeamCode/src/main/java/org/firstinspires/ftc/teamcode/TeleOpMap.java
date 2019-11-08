@@ -137,6 +137,11 @@ public class TeleOpMap {
         targetFR = motorFR.getCurrentPosition() + distance;
         targetRL = motorRL.getCurrentPosition() + distance;
         targetRR = motorRR.getCurrentPosition() + distance;
+        telemetry.addData("targetRL: ", targetRL);
+        telemetry.addData("targetRR: ", targetRR);
+        telemetry.addData("targetFL: ", targetFL);
+        telemetry.addData("targetFR: ", targetFR);
+        telemetry.update();
         motorFL.setTargetPosition(targetFL);
         motorFR.setTargetPosition(targetFR);
         motorRL.setTargetPosition(targetRL);
@@ -189,6 +194,11 @@ public class TeleOpMap {
         targetFR = motorFR.getCurrentPosition() - distance;
         targetRL = motorRL.getCurrentPosition() - distance;
         targetRR = motorRR.getCurrentPosition() + distance;
+        telemetry.addData("targetRL: ", targetRL);
+        telemetry.addData("targetRR: ", targetRR);
+        telemetry.addData("targetFL: ", targetFL);
+        telemetry.addData("targetFR: ", targetFR);
+        telemetry.update();
         motorFL.setTargetPosition(targetFL);
         motorFR.setTargetPosition(targetFR);
         motorRL.setTargetPosition(targetRL);
