@@ -27,6 +27,9 @@ public class TeleOpMap {
     static final double FEET = 12 * INCHES;
     int OFFSET = 0;
     public static final double DRIVE_SPEED = 0.5;
+    //counts per inch: 189.072002609
+
+
     //public ColorSensor colorSensor;//legacy code, can be removed
 
     //YellowJacket for Close
