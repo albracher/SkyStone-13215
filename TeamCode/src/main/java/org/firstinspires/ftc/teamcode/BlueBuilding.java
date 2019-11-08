@@ -36,6 +36,12 @@ public class BlueBuilding extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
+        // Resets encoder values to prevent the robot from freaking out as soon as we init
+        robot.motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
