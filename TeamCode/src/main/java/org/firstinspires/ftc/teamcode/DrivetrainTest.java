@@ -123,8 +123,6 @@ public class DrivetrainTest extends LinearOpMode {
             // This way it's also easy to just drive straight, or just turn.
             drive = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
-            //makes turn slower than everything else
-            turn*= 0.5;
             strafe = gamepad1.left_stick_x;
 
             // Combine drive and turn for blended motion.
