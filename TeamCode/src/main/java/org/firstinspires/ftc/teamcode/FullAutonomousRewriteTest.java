@@ -8,8 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 /*
@@ -73,11 +74,22 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 
     public void runOpMode() {
         robot.init(hardwareMap);
-        initVuforia();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
         String x;
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
+            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+            tfodParameters.minimumConfidence = 0.8;
+            tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+            tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -103,45 +115,53 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
 
+
         waitForStart();
-//        robot.drive(0.5, -1200);
-//
-//        if (tfod != null) {
-//            // getUpdatedRecognitions() will return null if no new information is available since
-//            // the last time that call was made.
-//            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//            sleep(500);
-//            if (updatedRecognitions != null) {
-//
-//
-//                // step through the list of recognitions and display boundary info.
-//                int i = 0;
-//                for (Recognition recognition : updatedRecognitions) {
-//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-//                    telemetry.update()
-//;                    sleep(5000);
-//                    x = recognition.getLabel();
-//                    if(x.equals("Stone")){
-//                        robot.strafe(0.5,500);
-//                        if(x.equals("Stone")) {
-//                            robot.strafe(0.5, 500);
-//                        }
-//                    }
-//
-//                }
-//                telemetry.update();
-//            }
-//
-//
-//            // Play the audio
-//            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-//            robot.rotate("ccw", 0.4, 170);
-            robot.autonClaw.setPosition(1.0);            // S4: Stop and close the claw.
-            robot.autonClamp.setPosition(0.0);
-            robot.autonClaw.setPosition(0.0);
+        robot.drive(0.5, -1200);
+
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            sleep(500);
+            if (updatedRecognitions != null) {
+
+
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.update()
+                    ;
+                    sleep(5000);
+                    x = recognition.getLabel();
+                    if (x.equals("Stone")) {
+                        robot.strafe(0.5, 500);
+                        if (x.equals("Stone")) {
+                            robot.strafe(0.5, 500);
+                        }
+                    }
+
+                }
+                telemetry.update();
+            }
+
+
+            // Play the audio
+            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
+            robot.autonClaw.setPosition(0.5);
+            robot.rotate("ccw", 0.4, 175);
+            robot.autonClamp.setPosition(0.1);
+            sleep(2000);
+            robot.autonClaw.setPosition(0.7);// S4: Stop and close the claw.
+            sleep(2000);
+            robot.autonClamp.setPosition(0.5);
+            sleep(2000);
+            robot.autonClaw.setPosition(0.2);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
+            tfod.shutdown();
             telemetry.update();
 
             //ONE TILE IS 24 INCHES X 24 INCHES
@@ -157,30 +177,6 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         }
 
 
-    public void initVuforia () {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
-    public void initTfod () {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        
     }
 }

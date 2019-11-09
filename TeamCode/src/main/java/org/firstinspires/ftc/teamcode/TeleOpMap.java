@@ -17,6 +17,8 @@ public class TeleOpMap {
     public DcMotor armR = null;
     public DcMotor armL = null;
     public Servo claw    = null;
+    public Servo autonClaw    = null;
+    public Servo autonClamp    = null;
     public static final double MID_SERVO       =  0.5 ;
     static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
@@ -73,6 +75,8 @@ public class TeleOpMap {
         armL = hwMap.get(DcMotor.class, "al");
         armR = hwMap.get(DcMotor.class, "ar");
         claw  = hwMap.get(Servo.class, "c");
+        autonClamp  = hwMap.get(Servo.class, "a2");
+        autonClaw  = hwMap.get(Servo.class, "a1");
 
         motorFR.setDirection(DcMotor.Direction.FORWARD);
         motorFL.setDirection(DcMotor.Direction.REVERSE);

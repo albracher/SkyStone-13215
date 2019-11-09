@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -11,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Servo 0.5", group="F.A.R.T.")
+@TeleOp(name="Servo 0.5", group="F.A.R.T.")
 
 /* Declare OpMode members. */
 
@@ -24,6 +26,10 @@ public class ServoTest extends LinearOpMode {
 
     public static double DRIVE_SPEED = 0.5;
 
+    final double CLAW_SPEED = 0.001;
+    private double clawOffset1 = 0;
+    private double clawOffset2 = 0;
+    private double clawOffset3 = 0;
     /*
     tile size is 24 inches
     660 counts of encoder = 4 inches
@@ -31,8 +37,7 @@ public class ServoTest extends LinearOpMode {
     */
 
     @Override
-
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
 
         /**=
@@ -52,11 +57,13 @@ public class ServoTest extends LinearOpMode {
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
-
-        robot.autonClaw.setPosition(0);            // S4: Stop and close the claw.
-        robot.autonClamp.setPosition(0);
+        robot.claw.setPosition(0.5);
+        robot.autonClaw.setPosition(0.5);            // S4: Stop and close the claw.
+        robot.autonClamp.setPosition(0.5);
 
         waitForStart();
+
+        while (opModeIsActive()) {
 //        robot.drive(0.5, -1200);
 //
 //        if (tfod != null) {
@@ -86,15 +93,39 @@ public class ServoTest extends LinearOpMode {
 //            }
 //
 //
-//            // Play the audio
-//            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-//            robot.rotate("ccw", 0.4, 170);
-            robot.autonClaw.setPosition(0.5);            // S4: Stop and close the claw.
-            robot.autonClamp.setPosition(0.5);
+            if (gamepad1.right_bumper)
+                clawOffset1 += CLAW_SPEED;
+            else if (gamepad1.left_bumper)
+                clawOffset1 -= CLAW_SPEED;
+
+            // Move both servos to new position.  Assume servos are mirror image of each other.
+            clawOffset1 = Range.clip(clawOffset1, -0.5, 0.5);
+
+            robot.claw.setPosition(robot.MID_SERVO + clawOffset1);
+
+            if (gamepad1.a)
+                clawOffset2 += CLAW_SPEED;
+            else if (gamepad1.x)
+                clawOffset2 -= CLAW_SPEED;
+
+            // Move both servos to new position.  Assume servos are mirror image of each other.
+            clawOffset2 = Range.clip(clawOffset2, -0.5, 0.5);
+
+            robot.autonClaw.setPosition(robot.MID_SERVO + clawOffset2);
+            if (gamepad1.b)
+                clawOffset3 += CLAW_SPEED;
+            else if (gamepad1.y)
+                clawOffset3 -= CLAW_SPEED;
+
+            // Move both servos to new position.  Assume servos are mirror image of each other.
+            clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
+
+            robot.autonClamp.setPosition(robot.MID_SERVO + clawOffset3);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
             telemetry.update();
+        }
 
             //ONE TILE IS 24 INCHES X 24 INCHES
 

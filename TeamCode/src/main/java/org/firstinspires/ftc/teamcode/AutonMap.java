@@ -67,6 +67,7 @@ public class AutonMap {
     public DcMotor motorRL = null;
     public Servo autonClaw    = null;
     public Servo autonClamp    = null;
+    public Servo claw    = null;
     private double x = 0;
     private double y = 0;
 
@@ -142,6 +143,7 @@ public class AutonMap {
         motorRL = hwMap.get(DcMotor.class, "rl");
         autonClamp  = hwMap.get(Servo.class, "a2");
         autonClaw  = hwMap.get(Servo.class, "a1");
+        claw = hwMap.get(Servo.class, "c");
 
         motorFR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
         motorFL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward

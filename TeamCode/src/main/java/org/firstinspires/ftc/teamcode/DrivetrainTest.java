@@ -87,7 +87,7 @@ public class DrivetrainTest extends LinearOpMode {
         double powerRR;
         double intakePower;
         double clawOffset = 0;
-        final double CLAW_SPEED = 0.02;
+        final double CLAW_SPEED = 0.001;
         double armSpeed;
         double speed = 0.5;
         int counterUpTighten = 0;
@@ -186,6 +186,7 @@ public class DrivetrainTest extends LinearOpMode {
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
 
             robot.claw.setPosition(robot.MID_SERVO + clawOffset);
+
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Power: " + drive + "        Turn: " + turn + "        Strafe: " + strafe + "\n" +
