@@ -86,7 +86,7 @@ public class TeleOpMap {
         intakeL.setDirection(DcMotor.Direction.REVERSE);
         armL.setDirection(DcMotor.Direction.REVERSE);
         armR.setDirection(DcMotor.Direction.FORWARD);
-        claw.setPosition(MID_SERVO);
+
 
         // Set all motors to zero power
         motorFR.setPower(0);

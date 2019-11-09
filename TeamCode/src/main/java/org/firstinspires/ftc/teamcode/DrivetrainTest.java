@@ -86,8 +86,8 @@ public class DrivetrainTest extends LinearOpMode {
         double powerRL;
         double powerRR;
         double intakePower;
-        double clawOffset = 0;
-        final double CLAW_SPEED = 0.001;
+        double clawOffset = 0.01;
+        final double CLAW_SPEED = 0.01;
         double armSpeed;
         double speed = 0.5;
         int counterUpTighten = 0;
@@ -98,6 +98,9 @@ public class DrivetrainTest extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
+
+        robot.autonClaw.setPosition(0.3);
+        robot.autonClamp.setPosition(0.5);
 
         waitForStart();
 

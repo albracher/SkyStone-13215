@@ -288,6 +288,10 @@ public class AutonMap {
         }
 
         lastangle = heading;
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorRR.setPower(0);
+        motorRL.setPower(0);
     }
 
     public void strafe(double speed, int distance) {

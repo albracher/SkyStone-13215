@@ -117,39 +117,39 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 
 
         waitForStart();
-        robot.drive(0.5, -1200);
-
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            sleep(500);
-            if (updatedRecognitions != null) {
-
-
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.update()
-                    ;
-                    sleep(5000);
-                    x = recognition.getLabel();
-                    if (x.equals("Stone")) {
-                        robot.strafe(0.5, 500);
-                        if (x.equals("Stone")) {
-                            robot.strafe(0.5, 500);
-                        }
-                    }
-
-                }
-                telemetry.update();
-            }
-
-
-            // Play the audio
-            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-            robot.autonClaw.setPosition(0.5);
+//        robot.drive(0.5, -1200);
+//
+//        if (tfod != null) {
+//            // getUpdatedRecognitions() will return null if no new information is available since
+//            // the last time that call was made.
+//            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//            sleep(500);
+//            if (updatedRecognitions != null) {
+//
+//
+//                // step through the list of recognitions and display boundary info.
+//                int i = 0;
+//                for (Recognition recognition : updatedRecognitions) {
+//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+//                    telemetry.update()
+//                    ;
+//                    sleep(5000);
+//                    x = recognition.getLabel();
+//                    if (x.equals("Stone")) {
+//                        robot.strafe(0.5, 500);
+//                        if (x.equals("Stone")) {
+//                            robot.strafe(0.5, 500);
+//                        }
+//                    }
+//
+//                }
+//                telemetry.update();
+//            }
+//
+//
+//            // Play the audio
+//            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
+//            robot.autonClaw.setPosition(0.5);
             robot.rotate("ccw", 0.4, 175);
             robot.autonClamp.setPosition(0.1);
             sleep(2000);
@@ -179,4 +179,3 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 
         
     }
-}
