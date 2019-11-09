@@ -86,8 +86,10 @@ public class DrivetrainTest extends LinearOpMode {
         double powerRL;
         double powerRR;
         double intakePower;
-        double clawOffset = 0.01;
-        final double CLAW_SPEED = 0.01;
+        double clawOffset = 0.00;
+        double clawOffset2 = 0.00;
+        double clawOffset3 = 0.00;
+        final double CLAW_SPEED = 0.001;
         double armSpeed;
         double speed = 0.5;
         int counterUpTighten = 0;
@@ -98,9 +100,6 @@ public class DrivetrainTest extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
-
-        robot.autonClaw.setPosition(0.3);
-        robot.autonClamp.setPosition(0.5);
 
         waitForStart();
 
@@ -124,15 +123,17 @@ public class DrivetrainTest extends LinearOpMode {
             // This way it's also easy to just drive straight, or just turn.
             drive = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
+            //makes turn slower than everything else
+            turn*= 0.5;
             strafe = gamepad1.left_stick_x;
 
             // Combine drive and turn for blended motion.
             leftValue = drive - turn;
             rightValue = drive + turn;
-            powerFL = leftValue + strafe;
-            powerFR = rightValue - strafe;
-            powerRL = leftValue - strafe;
-            powerRR = rightValue + strafe;
+            powerFL = leftValue - strafe;
+            powerFR = rightValue + strafe;
+            powerRL = leftValue + strafe;
+            powerRR = rightValue - strafe;
 
             //applies acceleration curve
             powerFL *= Math.abs(powerFL);
@@ -185,9 +186,24 @@ public class DrivetrainTest extends LinearOpMode {
             else if (gamepad1 .left_bumper)
                 clawOffset -= CLAW_SPEED;
 
+            if (gamepad2.a)
+                clawOffset2 += CLAW_SPEED;
+            else if (gamepad2.y)
+                clawOffset2 -= CLAW_SPEED;
+
+            if (gamepad2.x)
+                clawOffset3 += CLAW_SPEED;
+            else if (gamepad2.b)
+                clawOffset3 -= CLAW_SPEED;
+
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
+            clawOffset2 = Range.clip(clawOffset, -0.5, 0.5);
+            clawOffset3 = Range.clip(clawOffset, -0.5, 0.5);
 
+
+            robot.claw.setPosition(robot.MID_SERVO + clawOffset);
+            robot.claw.setPosition(robot.MID_SERVO + clawOffset);
             robot.claw.setPosition(robot.MID_SERVO + clawOffset);
 
 

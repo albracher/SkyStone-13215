@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -78,14 +79,14 @@ public class TeleOpMap {
         autonClamp  = hwMap.get(Servo.class, "a2");
         autonClaw  = hwMap.get(Servo.class, "a1");
 
-        motorFR.setDirection(DcMotor.Direction.FORWARD);
-        motorFL.setDirection(DcMotor.Direction.REVERSE);
-        motorRR.setDirection(DcMotor.Direction.FORWARD);
-        motorRL.setDirection(DcMotor.Direction.REVERSE);
+        motorFR.setDirection(DcMotor.Direction.REVERSE);
+        motorFL.setDirection(DcMotor.Direction.FORWARD);
+        motorRR.setDirection(DcMotor.Direction.REVERSE);
+        motorRL.setDirection(DcMotor.Direction.FORWARD);
         intakeR.setDirection(DcMotor.Direction.FORWARD);
         intakeL.setDirection(DcMotor.Direction.REVERSE);
-        armL.setDirection(DcMotor.Direction.REVERSE);
-        armR.setDirection(DcMotor.Direction.FORWARD);
+        armL.setDirection(DcMotor.Direction.FORWARD);
+        armR.setDirection(DcMotor.Direction.REVERSE);
 
 
         // Set all motors to zero power
