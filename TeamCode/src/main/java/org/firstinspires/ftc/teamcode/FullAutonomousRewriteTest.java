@@ -136,9 +136,9 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 //            // Play the audio
 //            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 //            robot.rotate("ccw", 0.4, 170);
-            robot.autonclaw.setPosition(1.0);            // S4: Stop and close the claw.
-            robot.autonclamp.setPosition(0.0);
-            robot.autonclaw.setPosition(0.0);
+            robot.autonClaw.setPosition(1.0);            // S4: Stop and close the claw.
+            robot.autonClamp.setPosition(0.0);
+            robot.autonClaw.setPosition(0.0);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
@@ -155,31 +155,7 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         //test actuator
         actuate(1, 5);*/
         }
-        if (tfod != null) {
-            tfod.shutdown();
-        }
 
-
-
-
-/*    public void actuate(double speed, double time) {
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < time)) {
-            telemetry.addData("Status:", "Actuating", runtime.seconds());
-            telemetry.update();
-            robot.actuator.setPower(speed);
-        }
-    }*/
-
-    /*public void intake(double speed, double time) {
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < time)) {
-            telemetry.addData("Status:", "Actuating", runtime.seconds());
-            telemetry.update();
-            robot.intake.setPower(speed);
-        }
-    }*/
-    }
 
     public void initVuforia () {
         /*
