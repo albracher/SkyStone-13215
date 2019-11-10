@@ -270,7 +270,7 @@ public class AutonMap {
 
             }
         } else if (direction.equals("counterclockwise") || direction.equals("ccw")) {
-            while (heading < angle) {
+            while (heading < angle || (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy())) {
 
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);

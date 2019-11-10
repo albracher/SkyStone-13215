@@ -82,6 +82,7 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         String x;
+        String y;
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -117,47 +118,83 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 
 
         waitForStart();
-//        robot.drive(0.5, -1200);
-//
-//        if (tfod != null) {
-//            // getUpdatedRecognitions() will return null if no new information is available since
-//            // the last time that call was made.
-//            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//            sleep(500);
-//            if (updatedRecognitions != null) {
-//
-//
-//                // step through the list of recognitions and display boundary info.
-//                int i = 0;
-//                for (Recognition recognition : updatedRecognitions) {
-//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-//                    telemetry.update()
-//                    ;
-//                    sleep(5000);
-//                    x = recognition.getLabel();
-//                    if (x.equals("Stone")) {
-//                        robot.strafe(0.5, 500);
-//                        if (x.equals("Stone")) {
-//                            robot.strafe(0.5, 500);
-//                        }
-//                    }
-//
-//                }
-//                telemetry.update();
-//            }
-//
-//
-//            // Play the audio
-//            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-//            robot.autonClaw.setPosition(0.5);
-            robot.rotate("ccw", 0.4, 175);
-            robot.autonClamp.setPosition(0.1);
-            sleep(2000);
-            robot.autonClaw.setPosition(0.7);// S4: Stop and close the claw.
-            sleep(2000);
+
+        //drive towards scanning position
+        robot.drive(0.5, -1350);
+
+        //extend claw
+        robot.autonClaw.setPosition(0.55);
+
+        //prep clamp
+        robot.autonClamp.setPosition(0.95);
+        sleep(500);
+
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            sleep(1000);
+            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+            telemetry.update()
+            if (updatedRecognitions != null) {
+
+
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.update()
+                    ;
+                    sleep(1000);
+                    x = recognition.getLabel();
+                    if (x.equals("Stone")) {
+                        robot.strafe(0.5, 500);
+                        y = recognition.getLabel();
+                        if (y.equals("Stone")) {
+                            robot.strafe(0.5, 500);
+                        }
+                    }
+
+                }
+                telemetry.update();
+            }
+
+
+            // Play the audio
+            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
+
+            //rotate to grab
+            robot.rotate("ccw", 0.2, 171);
+            //approach stone
+            robot.drive(0.2, 350);
+            //grab
             robot.autonClamp.setPosition(0.5);
-            sleep(2000);
-            robot.autonClaw.setPosition(0.2);
+            sleep(250);
+            //raise
+            robot.autonClaw.setPosition(0.75);// S4: Stop and close the claw.
+            //reverse behind bridge
+            robot.drive(0.5, -1000);
+            //move through the bridge
+            robot.strafe(0.5, 6300);
+            //approach foundation
+            robot.drive(0.5, 1400);
+            //drops the block
+            robot.autonClamp.setPosition(0.95);
+            //moves away from the block
+            robot.strafe(0.5, 500);
+            sleep(250);
+            //attach the arm to the foundation
+            robot.autonClamp.setPosition(0.7);
+            robot.autonClaw.setPosition(0.3);
+            sleep(1000);
+            //pull back foundation
+            robot.drive(0.5, -2350);
+            //push foundation into corner
+            robot.rotate("ccw",0.3,10);
+            //clear claw for TeleOp
+            robot.autonClaw.setPosition(0.7);
+            //move under bridge
+            robot.strafe(0.5,-3550);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
@@ -166,16 +203,8 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
 
             //ONE TILE IS 24 INCHES X 24 INCHES
 
-            //drive to crater
-
-
-            //test intake
-/*        intake(0.5, 3);
-        sleep(1000);
-        //test actuator
-        actuate(1, 5);*/
         }
 
 
-        
     }
+}
