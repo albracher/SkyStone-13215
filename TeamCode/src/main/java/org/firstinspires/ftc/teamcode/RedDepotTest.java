@@ -1,28 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 /*
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Depot", group="autonomous")
+@Autonomous(name="Red Depot Test", group="autonomous")
 
 /* Declare OpMode members. */
 
 
-public class RedDepot extends LinearOpMode {
+public class RedDepotTest extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -77,11 +75,11 @@ public class RedDepot extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        String x;
+        String x= "";
         String y;
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -129,7 +127,7 @@ public class RedDepot extends LinearOpMode {
         robot.autonClamp.setPosition(0.95);
         sleep(3000);
 
-       // telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
+        // telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
 
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
@@ -142,29 +140,71 @@ public class RedDepot extends LinearOpMode {
 
                 // step through the list of recognitions and display boundary info.
                 int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.update();
-                    sleep(5000);
-                    x = recognition.getLabel();
-                    if (x.equals("Stone")) {
+
+                while (x.isEmpty() || !x.equals("Skystone") || (i < 2)) {
+                    i++;
+                    for (Recognition recognition : updatedRecognitions) {
+                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        telemetry.update()
+                        ;
+                        sleep(5000);
+                        x = recognition.getLabel();
+                        if (x.equals("Skystone")) { 
+                            i= 3;
+/*
                         robot.strafe(0.5, 500);
                         y = recognition.getLabel();
                         if (y.equals("Stone")) {
                             robot.strafe(0.5, 500);
                         }
                     }
+*/
+                            //rotate to grab
+                            robot.rotate("ccw", 0.2, 175);
+                            //approach stone
+                            robot.drive(0.2, 350);
+                            //grab
+                            robot.autonClamp.setPosition(0.5);
+                            sleep(250);
+                            //raise
+                            robot.autonClaw.setPosition(0.75);// S4: Stop and close the claw.
+                            //reverse behind bridge
+                            robot.drive(0.5, -1000);
+                            //move through the bridge
+                            robot.strafe(0.5, 6300);
+                            //approach foundation
+                            robot.drive(0.5, 1400);
+                            //drops the block
+                            robot.autonClamp.setPosition(0.95);
+                            //moves away from the block
+                            robot.strafe(0.5, 500);
+                            sleep(250);
+                            //attach the arm to the foundation
+                            robot.autonClamp.setPosition(0.7);
+                            robot.autonClaw.setPosition(0.3);
+                            sleep(1000);
+                            //pull back foundation
+                            robot.drive(0.5, -2550);
+                            //push foundation into corner
+                            robot.rotate("ccw", 0.3, 10);
+                            //clear claw for TeleOp
+                            robot.autonClaw.setPosition(0.7);
+                            //move under bridge
+                            robot.strafe(0.5, -3700);
 
-                }
-                telemetry.update();
-            }
+                        } else {
+                            robot.strafe(0.5, 500);
+                        }
+
+                    }
+                    telemetry.update();
 
 
-            // Play the audio
-            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-
+                    // Play the audio
+                    //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
+/*
             //rotate to grab
-            robot.rotate("ccw", 0.2, 173);
+            robot.rotate("ccw", 0.2, 175);
             //approach stone
             robot.drive(0.2, 350);
             //grab
@@ -195,16 +235,18 @@ public class RedDepot extends LinearOpMode {
             robot.autonClaw.setPosition(0.7);
             //move under bridge
             robot.strafe(0.5,-3700);
+*/
+
+                    telemetry.addData("Status", "I've got a good lock! Firing!");
+                    tfod.shutdown();
+                    telemetry.update();
+
+                    //ONE TILE IS 24 INCHES X 24 INCHES
+
+                }
 
 
-            telemetry.addData("Status", "I've got a good lock! Firing!");
-            tfod.shutdown();
-            telemetry.update();
-
-            //ONE TILE IS 24 INCHES X 24 INCHES
-
+            }
         }
-
-
     }
 }

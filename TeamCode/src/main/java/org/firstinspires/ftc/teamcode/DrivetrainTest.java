@@ -100,6 +100,8 @@ public class DrivetrainTest extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
+        robot.autonClamp.setPosition(0.5);
+        robot.autonClaw.setPosition(0.5);
 
         waitForStart();
 
@@ -113,7 +115,7 @@ public class DrivetrainTest extends LinearOpMode {
             //speed is
             //LS is fast, RS is half speed
             if (gamepad1.left_stick_button) {
-                speed = 1;
+                speed = 0.25;
             }
             if (gamepad1.right_stick_button) {
                 speed = 0.5;
@@ -158,51 +160,52 @@ public class DrivetrainTest extends LinearOpMode {
             robot.motorRR.setPower(powerRR);
 
             //rear right motor test while buttons are held
-            while (gamepad1.a){
+            while (gamepad2.a){
                 robot.intakeL.setPower(0.5);
                 robot.intakeR.setPower(0.5);
             }
-            while(gamepad1.b) {
+            while(gamepad2.b) {
                 robot.intakeL.setPower(-0.5);
                 robot.intakeR.setPower(-0.5);
             }
-            while(gamepad1.x){
+            while(gamepad2.x){
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
 
             //left and right trigger values are used to calculate armSpeed
-            armSpeed=0.45*(gamepad1.right_trigger-gamepad1.left_trigger);
+            armSpeed=0.25
+                    *(gamepad2.right_trigger-gamepad2.left_trigger);
 
             //armSpeed is applied to motors
             robot.armL.setPower(armSpeed);
             robot.armR.setPower(armSpeed);
 
             //Use LB and RB to open and close the claw
-            if (gamepad1.right_bumper)
+            if (gamepad2.right_bumper)
                 clawOffset += CLAW_SPEED;
-            else if (gamepad1 .left_bumper)
+            else if (gamepad2 .left_bumper)
                 clawOffset -= CLAW_SPEED;
 
-            if (gamepad2.a)
+            if (gamepad1.a)
                 clawOffset2 += CLAW_SPEED;
-            else if (gamepad2.y)
+            else if (gamepad1.y)
                 clawOffset2 -= CLAW_SPEED;
 
-            if (gamepad2.x)
+            if (gamepad1.x)
                 clawOffset3 += CLAW_SPEED;
-            else if (gamepad2.b)
+            else if (gamepad1.b)
                 clawOffset3 -= CLAW_SPEED;
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-            clawOffset2 = Range.clip(clawOffset, -0.5, 0.5);
-            clawOffset3 = Range.clip(clawOffset, -0.5, 0.5);
+            clawOffset2 = Range.clip(clawOffset2, -0.5, 0.5);
+            clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
 
 
             robot.claw.setPosition(robot.MID_SERVO + clawOffset);
-            robot.claw.setPosition(robot.MID_SERVO + clawOffset);
-            robot.claw.setPosition(robot.MID_SERVO + clawOffset);
+            robot.autonClaw.setPosition(robot.MID_SERVO + clawOffset2);
+            robot.autonClamp.setPosition(robot.MID_SERVO + clawOffset3);
 
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +

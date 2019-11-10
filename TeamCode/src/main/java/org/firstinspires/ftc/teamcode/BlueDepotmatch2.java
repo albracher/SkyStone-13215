@@ -1,28 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 /*
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Depot", group="autonomous")
+@Autonomous(name="Red Depot Match 3", group="autonomous")
 
 /* Declare OpMode members. */
 
-
-public class RedDepot extends LinearOpMode {
+//not bluedepotmatch2 btw
+public class BlueDepotmatch2 extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -77,7 +75,7 @@ public class RedDepot extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -120,7 +118,7 @@ public class RedDepot extends LinearOpMode {
         waitForStart();
 
         //drive towards scanning position
-        robot.drive(0.5, -1350);
+        robot.drive(0.5, -1450);
 
         //extend claw
         robot.autonClaw.setPosition(0.5);
@@ -147,10 +145,10 @@ public class RedDepot extends LinearOpMode {
                     telemetry.update();
                     sleep(5000);
                     x = recognition.getLabel();
-                    if (x.equals("Stone")) {
+                    if (x.isEmpty()||x.equals("Stone")) {
                         robot.strafe(0.5, 500);
                         y = recognition.getLabel();
-                        if (y.equals("Stone")) {
+                        if (y.isEmpty() || y.equals("Stone")) {
                             robot.strafe(0.5, 500);
                         }
                     }
@@ -164,7 +162,7 @@ public class RedDepot extends LinearOpMode {
             //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
             //rotate to grab
-            robot.rotate("ccw", 0.2, 173);
+            robot.rotate("ccw", 0.2, 175);
             //approach stone
             robot.drive(0.2, 350);
             //grab
@@ -175,26 +173,30 @@ public class RedDepot extends LinearOpMode {
             //reverse behind bridge
             robot.drive(0.5, -1000);
             //move through the bridge
-            robot.strafe(0.5, 6300);
+            robot.strafe(0.5, -5000);
             //approach foundation
-            robot.drive(0.5, 1400);
+//            robot.drive(0.5, 1400);
             //drops the block
             robot.autonClamp.setPosition(0.95);
             //moves away from the block
-            robot.strafe(0.5, 500);
-            sleep(250);
-            //attach the arm to the foundation
-            robot.autonClamp.setPosition(0.7);
-            robot.autonClaw.setPosition(0.3);
+//            robot.strafe(0.5, 500);
+//            sleep(250);
+//            //attach the arm to the foundation
+//            robot.autonClamp.setPosition(0.7);
+//            robot.autonClaw.setPosition(0.3);
+//            sleep(1000);
+//            //pull back foundation
+//            robot.drive(0.5, -2550);
+//            //push foundation into corner
+//            robot.rotate("ccw",0.3,10);
+//            //clear claw for TeleOp
+//            robot.autonClaw.setPosition(0.7);
+//            //move under bridge
+
+            robot.autonClamp.setPosition(0.95);
             sleep(1000);
-            //pull back foundation
-            robot.drive(0.5, -2550);
-            //push foundation into corner
-            robot.rotate("ccw",0.3,10);
-            //clear claw for TeleOp
-            robot.autonClaw.setPosition(0.7);
-            //move under bridge
-            robot.strafe(0.5,-3700);
+            robot.autonClamp.setPosition(0.5);
+            robot.strafe(0.5,3000);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");

@@ -1,16 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 /*
@@ -22,7 +20,7 @@ import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 /* Declare OpMode members. */
 
 
-public class RedDepot extends LinearOpMode {
+public class RedDepotMatch3 extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -77,7 +75,7 @@ public class RedDepot extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = CameraDirection.BACK;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -120,7 +118,7 @@ public class RedDepot extends LinearOpMode {
         waitForStart();
 
         //drive towards scanning position
-        robot.drive(0.5, -1350);
+        robot.drive(0.5, -1450);
 
         //extend claw
         robot.autonClaw.setPosition(0.5);
