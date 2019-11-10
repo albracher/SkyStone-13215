@@ -9,13 +9,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Blue Building", group="blue")
+@Autonomous(name="Building Side (Universal)", group="autonomous")
 
 /* Declare OpMode members. */
 
 public class BlueBuilding extends LinearOpMode {
 
-    TeleOpMap robot = new TeleOpMap();
+    AutonMap robot = new AutonMap();
 
 /*
     private GoldAlignDetector detector;
@@ -24,12 +24,6 @@ public class BlueBuilding extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     public static double DRIVE_SPEED = 0.5;
-
-    /*
-    tile size is 24 inches
-    660 counts of encoder = 4 inches
-    1 inch = 165 counts
-    */
 
     @Override
 
@@ -48,11 +42,14 @@ public class BlueBuilding extends LinearOpMode {
 
         waitForStart();
 
-        robot.strafe(-DRIVE_SPEED, -3000);
+        //move forward to foundation
+        robot.strafe(DRIVE_SPEED, 2520);
 
-        robot.strafe(DRIVE_SPEED, 3000);
+        //write servo stuff here
 
-        robot.drive(DRIVE_SPEED, 3000);
+
+        //reverse back into the corner for parking points
+        robot.drive(-DRIVE_SPEED, -2520);
 
     }
 }
