@@ -15,7 +15,7 @@ import java.util.List;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Blue Depot", group="F.A.R.T.")
+@Autonomous(name="Blue Depot", group="autonomous")
 
 /* Declare OpMode members. */
 
