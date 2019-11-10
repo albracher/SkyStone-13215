@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,11 +8,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Building Side (Universal)", group="autonomous")
+@Autonomous(name="Drive Forward 6 inches", group="autonomous")
 
 /* Declare OpMode members. */
 
-public class BuildingSide extends LinearOpMode {
+public class DriveForward extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -50,21 +49,12 @@ public class BuildingSide extends LinearOpMode {
 
 
         //move forward to foundation
-        robot.drive(DRIVE_SPEED, 2100);
+        robot.drive(DRIVE_SPEED, 500);
 
         sleep(250);
-        //attach the arm to the foundation
-        robot.autonClamp.setPosition(0.7);
-        robot.autonClaw.setPosition(0.3);
-        sleep(1000);
-        //pull back foundation
-        robot.drive(0.5, -2350);
-        //push foundation into corner
-        robot.rotate("cw",0.3,10);
+
         //clear claw for TeleOp
         robot.autonClaw.setPosition(0.7);
-        //move under bridge
-        robot.strafe(0.5,3550);
 
 
         telemetry.addData("Status", "I've got a good lock! Firing!");

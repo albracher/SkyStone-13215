@@ -17,12 +17,12 @@ import java.util.List;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Full Autonomous Rewrite Test", group="F.A.R.T.")
+@Autonomous(name="Red Depot", group="autonomous")
 
 /* Declare OpMode members. */
 
 
-public class FullAutonomousRewriteTest extends LinearOpMode {
+public class RedDepot extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
