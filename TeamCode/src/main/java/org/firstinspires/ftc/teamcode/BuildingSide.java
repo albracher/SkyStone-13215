@@ -36,6 +36,10 @@ public class BlueBuilding extends LinearOpMode {
         robot.motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //set servo starting positions
+        robot.autonClaw.setPosition(0.5);
+        robot.autonClamp.setPosition(0.5);
+
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
@@ -46,7 +50,8 @@ public class BlueBuilding extends LinearOpMode {
         robot.strafe(DRIVE_SPEED, 2520);
 
         //write servo stuff here
-
+        robot.autonClaw.setPosition(0.5);
+        robot.autonClamp.setPosition(0.5);
 
         //reverse back into the corner for parking points
         robot.drive(-DRIVE_SPEED, -2520);
