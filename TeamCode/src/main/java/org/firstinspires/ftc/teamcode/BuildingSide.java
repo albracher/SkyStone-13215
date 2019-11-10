@@ -13,7 +13,7 @@ import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 
 /* Declare OpMode members. */
 
-public class BuildingSide extends LinearOpMode {
+public class BlueBuilding extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -37,10 +37,8 @@ public class BuildingSide extends LinearOpMode {
         robot.motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //set servo starting positions
-
-        robot.autonClaw.setPosition(0.55);
-
-        robot.autonClamp.setPosition(0.9);
+        robot.autonClaw.setPosition(0.5);
+        robot.autonClamp.setPosition(0.5);
 
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
@@ -48,9 +46,12 @@ public class BuildingSide extends LinearOpMode {
 
         waitForStart();
 
-
         //move forward to foundation
+<<<<<<< HEAD
         robot.drive(DRIVE_SPEED, 2100);
+=======
+        robot.strafe(DRIVE_SPEED, 2520);
+>>>>>>> parent of 09afa5f... kjghkjh
 
         sleep(250);
         //attach the arm to the foundation
