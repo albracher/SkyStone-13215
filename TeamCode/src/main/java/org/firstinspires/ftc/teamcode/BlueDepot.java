@@ -121,19 +121,20 @@ public class BlueDepot extends LinearOpMode {
         robot.drive(0.5, -1350);
 
         //extend claw
-        robot.autonClaw.setPosition(0.55);
+        robot.autonClaw.setPosition(0.5);
 
         //prep clamp
         robot.autonClamp.setPosition(0.95);
-        sleep(500);
+        sleep(3000);
+
+        telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
 
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             sleep(1000);
-            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-            telemetry.update()
+
             if (updatedRecognitions != null) {
 
 
@@ -162,7 +163,7 @@ public class BlueDepot extends LinearOpMode {
             //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
             //rotate to grab
-            robot.rotate("ccw", 0.2, 171);
+            robot.rotate("ccw", 0.2, 175);
             //approach stone
             robot.drive(0.2, 350);
             //grab
@@ -186,13 +187,13 @@ public class BlueDepot extends LinearOpMode {
             robot.autonClaw.setPosition(0.3);
             sleep(1000);
             //pull back foundation
-            robot.drive(0.5, -2350);
+            robot.drive(0.5, -2600);
             //push foundation into corner
             robot.rotate("cw",0.3,10);
             //clear claw for TeleOp
             robot.autonClaw.setPosition(0.7);
             //move under bridge
-            robot.strafe(0.5,3550);
+            robot.strafe(0.5,3700);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
