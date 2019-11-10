@@ -129,13 +129,14 @@ public class FullAutonomousRewriteTest extends LinearOpMode {
         robot.autonClamp.setPosition(0.95);
         sleep(500);
 
+        telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
+
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             sleep(1000);
-            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-            telemetry.update()
+
             if (updatedRecognitions != null) {
 
 
