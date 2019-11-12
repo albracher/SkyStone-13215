@@ -37,9 +37,7 @@ public class DriveForward extends LinearOpMode {
 
         //set servo starting positions
 
-        robot.autonClaw.setPosition(0.55);
 
-        robot.autonClamp.setPosition(0.9);
 
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
@@ -49,7 +47,8 @@ public class DriveForward extends LinearOpMode {
 
 
         //move forward to foundation
-        robot.drive(DRIVE_SPEED, 500);
+        sleep(20000);
+        robot.drive(DRIVE_SPEED, -3000);
 
         sleep(250);
 

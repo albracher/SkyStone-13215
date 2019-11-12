@@ -15,7 +15,7 @@ import java.util.List;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Blue Depot", group="autonomous")
+@Autonomous(name="Red Depot", group="autonomous")
 
 /* Declare OpMode members. */
 
@@ -118,7 +118,7 @@ public class BlueDepot extends LinearOpMode {
         waitForStart();
 
         //drive towards scanning position
-        robot.drive(0.5, -1350);
+        robot.drive(0.5, -1450);
 
         //extend claw
         robot.autonClaw.setPosition(0.5);
@@ -146,10 +146,10 @@ public class BlueDepot extends LinearOpMode {
                     ;
                     sleep(1000);
                     x = recognition.getLabel();
-                    if (x.equals("Stone")) {
+                    if (x.isEmpty()||x.equals("Stone")) {
                         robot.strafe(0.5, -500);
                         y = recognition.getLabel();
-                        if (y.equals("Stone")) {
+                        if (y.isEmpty()||y.equals("Stone")) {
                             robot.strafe(0.5, -500);
                         }
                     }
@@ -163,7 +163,7 @@ public class BlueDepot extends LinearOpMode {
             //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
             //rotate to grab
-            robot.rotate("ccw", 0.2, 175);
+            robot.rotate("ccw", 0.2, 173);
             //approach stone
             robot.drive(0.2, 350);
             //grab
@@ -174,26 +174,26 @@ public class BlueDepot extends LinearOpMode {
             //reverse behind bridge
             robot.drive(0.5, -1000);
             //move through the bridge
-            robot.strafe(0.5, -6300);
+            robot.strafe(0.5, -6200);
             //approach foundation
-            robot.drive(0.5, 1400);
+            robot.drive(0.5, 1200);
             //drops the block
             robot.autonClamp.setPosition(0.95);
             //moves away from the block
-            robot.strafe(0.5, -500);
+            robot.strafe(0.5, -700);
             sleep(250);
             //attach the arm to the foundation
             robot.autonClamp.setPosition(0.7);
             robot.autonClaw.setPosition(0.3);
             sleep(1000);
             //pull back foundation
-            robot.drive(0.5, -2600);
+            robot.drive(0.5, -3050);
             //push foundation into corner
             robot.rotate("cw",0.3,10);
             //clear claw for TeleOp
             robot.autonClaw.setPosition(0.7);
             //move under bridge
-            robot.strafe(0.5,3700);
+            robot.strafe(0.5,4200);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
