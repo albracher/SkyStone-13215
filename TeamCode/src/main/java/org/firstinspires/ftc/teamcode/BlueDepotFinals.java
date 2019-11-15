@@ -15,12 +15,12 @@ import java.util.List;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Depot(not this one)", group="autonomous")
+@Autonomous(name="Blue Depot Finals", group="autonomous")
 
 /* Declare OpMode members. */
 
 
-public class RedDepotMatch3 extends LinearOpMode {
+public class BlueDepotFinals extends LinearOpMode {
 
     AutonMap robot = new AutonMap();
 
@@ -125,7 +125,7 @@ public class RedDepotMatch3 extends LinearOpMode {
 
         //prep clamp
         robot.autonClamp.setPosition(0.95);
-        sleep(3000);
+        sleep(1000);
 
        // telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
 
@@ -133,7 +133,7 @@ public class RedDepotMatch3 extends LinearOpMode {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            sleep(3000);
+            sleep(2000);
 
             if (updatedRecognitions != null) {
 
@@ -143,7 +143,7 @@ public class RedDepotMatch3 extends LinearOpMode {
                 for (Recognition recognition : updatedRecognitions) {
                     telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
                     telemetry.update();
-                    sleep(5000);
+                    sleep(2000);
                     x = recognition.getLabel();
                     if (x.equals("Stone")) {
                         robot.strafe(0.5, 500);
@@ -162,7 +162,7 @@ public class RedDepotMatch3 extends LinearOpMode {
             //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
             //rotate to grab
-            robot.rotate("ccw", 0.2, 173);
+            robot.rotate("ccw", 0.2, 175);
             //approach stone
             robot.drive(0.2, 350);
             //grab
@@ -173,26 +173,29 @@ public class RedDepotMatch3 extends LinearOpMode {
             //reverse behind bridge
             robot.drive(0.5, -1000);
             //move through the bridge
-            robot.strafe(0.5, 6300);
+            robot.strafe(0.8, 6300);
             //approach foundation
             robot.drive(0.5, 1400);
             //drops the block
             robot.autonClamp.setPosition(0.95);
             //moves away from the block
-            robot.strafe(0.5, 500);
-            sleep(250);
-            //attach the arm to the foundation
-            robot.autonClamp.setPosition(0.7);
-            robot.autonClaw.setPosition(0.3);
-            sleep(1000);
-            //pull back foundation
-            robot.drive(0.5, -2550);
-            //push foundation into corner
-            robot.rotate("ccw",0.3,10);
-            //clear claw for TeleOp
-            robot.autonClaw.setPosition(0.7);
-            //move under bridge
-            robot.strafe(0.5,-3700);
+//            robot.strafe(0.5, 500);
+//            sleep(250);
+//            //attach the arm to the foundation
+//            robot.autonClamp.setPosition(0.7);
+//            robot.autonClaw.setPosition(0.3);
+//            sleep(1000);
+//            //pull back foundation
+//            robot.drive(0.5, -2550);
+//            //push foundation into corner
+//
+//            //clear claw for TeleOp
+            robot.drive(0.5, -750);
+            robot.autonClamp.setPosition(0.3);
+            sleep(500);
+            robot.autonClaw.setPosition(0.9);
+//            //move under bridge
+            robot.strafe(0.5,-4100);
 
 
             telemetry.addData("Status", "I've got a good lock! Firing!");
