@@ -119,7 +119,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
 
-            //adjusted input here is meant to make robot movement less janky
+            /*adjusted input here is meant to make robot movement less jerky
+            it basically works by forcing the robot to change speed at a certain rate
+            this basically means no sudden accelerations or sudden stops
+             */
+
             if (adjustedInput) {
                 if(drive>newDrive){
                     newDrive += 0.02;
