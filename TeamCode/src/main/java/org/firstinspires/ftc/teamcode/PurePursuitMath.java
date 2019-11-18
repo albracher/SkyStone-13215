@@ -38,7 +38,7 @@ public class PurePursuitMath {
         ArrayList<Point> allPoints = new ArrayList<>();
 
         try{
-            double xRoot1 = (-quadraticB + Math.sqrt(Math.pow(quadraticB,2) - (4.0 * quadraticA * quadraticC)))/(2.0*quadraticA);
+            double xRoot1 = ((-quadraticB + Math.sqrt(Math.pow(quadraticB,2) - (4.0 * quadraticA * quadraticC)))/(2.0*quadraticA);
             double yRoot1 = m1 * (xRoot1 -x1) + y1;
 
             //put back the offset
@@ -69,5 +69,5 @@ public class PurePursuitMath {
         }
 
     }
-
+}
 

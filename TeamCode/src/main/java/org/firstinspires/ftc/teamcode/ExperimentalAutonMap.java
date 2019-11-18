@@ -71,9 +71,7 @@ public class ExperimentalAutonMap {
     private BNO055IMU imu;
     private BNO055IMU.Parameters gyroParameters;
 
-    public double robotXPos;
-    public double robotYpos;
-    public double heading;
+    private double heading;
     private double lastangle = 0;
     private boolean ccwRotation = false;
 
@@ -81,7 +79,7 @@ public class ExperimentalAutonMap {
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_ROTATION = COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION;     //used to compute degrees
-    static final double M = (2 / Math.sqrt(2));
+    public static final double M = (2 / Math.sqrt(2));
     static final double INCHES = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION / (WHEEL_DIAMETER_INCHES * Math.PI))*M; //calculates counts per inch
     static final double FEET = 12 * INCHES;
     //59.41785 base inches (no mec compensation)
@@ -90,6 +88,22 @@ public class ExperimentalAutonMap {
     public static final double DRIVE_SPEED = 0.5;
 
     public static final double MID_SERVO = 0.5;//legacy code, can be removed
+    //public ColorSensor colorSensor;//legacy code, can be removed
+
+    //YellowJacket for Close
+    //NeverRest for Open
+
+    //NeverRest 40 motor: Diameter = 0.85 inches
+    //NeverREST: 120 rpm
+    //Circumference = 2.669 inches
+    //NeverRest: IPM: 320.28 inches/min
+    //GoBilda Yellow Jacket motor: Diameter = 1 inch
+    //GoBilda: 84 rpm
+    //Circumference: 3.14 inches
+    //GoBilda: IPM: 263.76 inches/min
+    //YellowJacket is close
+    //NeverRest is open
+    //Run NeverRest at 82.35% to get same power
 
     /* local OpMode members. */
 
@@ -146,32 +160,19 @@ public class ExperimentalAutonMap {
         motorRR.setPower(0);
         motorRL.setPower(0);
 
-
+        // fucking gyro init hell yeet dab
     }
 
     //use these for calculating changes in x and y for odometry
     //they did the monster math
     //it was a graveyard graph
-    // fucking gyro init hell yeet dab
     public void updateX(int dist){
 
     }
     public void updateY(int dist){
     }
 
-    public void xMovement(double speed){
-        motorFL.setPower(speed);
-        motorFR.setPower(speed);
-        motorRR.setPower(speed);
-        motorRL.setPower(speed);
-    }
 
-    public void yMovement(double speed){
-        motorFL.setPower(speed);
-        motorFR.setPower(speed);
-        motorRR.setPower(speed);
-        motorRL.setPower(speed);
-    }
 
 
     public void drive(double speed, int distance) {
