@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-import
-
 public class CartesianMovement {
     public static void goToPosition(double x, double y, double speed, double angle, double turnSpeed){
-        double distanceToTarget = Math.hypot(x - worldXPosition, y - worldYPosition);
+        double distanceToTarget = Math.hypot(x - ExperimentalAutonMap.robotXPos, y - ExperimentalAutonMap.robotYPos);
 
-        double absoluteAngleToTarget = Math.atan2( y - worldYPosition, x - worldXPosition);
+        double absoluteAngleToTarget = Math.atan2( y - ExperimentalAutonMap.robotYPos, x - ExperimentalAutonMap.robotXPos);
 
-        double relativeAndleToPoint = angleWrap(absoluteAngleToTarget - (worldAngle_rad - Math.toRadians(90)));
+        double relativeAngleToPoint = PurePursuitMath.angleWrap(absoluteAngleToTarget - (ExperimentalAutonMap.heading - Math.toRadians(90)));
 
-        double relativeXToPoint = Math.cos(relativeAndleToPoint) * distanceToTarget;
-        double relativeYToPoint = Math.sin(relativeAndleToPoint) * distanceToTarget;
+        double relativeXToPoint = Math.cos(relativeAngleToPoint) * distanceToTarget;
+        double relativeYToPoint = Math.sin(relativeAngleToPoint) * distanceToTarget;
+
+        double movementXPower = relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
+        double movementYPower = relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
+
+        ExperimentalAutonMap.xMovement(movementXPower * speed);
+        ExperimentalAutonMap.yMovement(movementYPower * speed);
     }
 }
