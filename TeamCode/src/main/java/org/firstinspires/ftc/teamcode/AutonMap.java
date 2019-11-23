@@ -296,6 +296,12 @@ public class AutonMap {
 
     public void rotate(double speed, double angle) {
 
+        //this is a modified version of the other angle code
+        //instead of checking for clockwise or counterclockwise it checks +-
+        //+ is counterclockwise i think
+        //angle are absoluted before the loop that turns the bot runs because i didn't want to
+        //mess with that code
+
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
