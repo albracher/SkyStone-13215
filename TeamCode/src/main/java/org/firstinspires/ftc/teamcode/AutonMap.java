@@ -294,6 +294,67 @@ public class AutonMap {
         motorRL.setPower(0);
     }
 
+    public void rotate(double speed, double angle) {
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
+        heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        heading = Math.floor(heading);
+        heading = Range.clip(heading, -180.0, 180.0);
+
+        //boolean beforeAngle = (direction.equals("cw") ? heading > angle | heading<angle);
+
+        if (angle<0) {
+            angle = Math.abs(angle);
+            while (Math.abs(heading) > angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
+
+            }
+        } else if (angle>0) {
+            angle = Math.abs(angle);
+            while (heading < angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                motorFR.setPower(speed);
+                motorFL.setPower(-speed);
+                motorRR.setPower(speed);
+                motorRL.setPower(-speed);
+            }
+        }
+
+        lastangle = heading;
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorRR.setPower(0);
+        motorRL.setPower(0);
+    }
+
     public void strafe(double speed, int distance) {
         // Resets encoder values so that it doesn't attempt to run to outdated values
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
