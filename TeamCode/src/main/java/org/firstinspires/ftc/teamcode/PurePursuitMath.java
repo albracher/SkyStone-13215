@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import java.util.*;
-import java.awt.*;
 
 public class PurePursuitMath {
 
