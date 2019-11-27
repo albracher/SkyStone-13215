@@ -181,6 +181,10 @@ public class ExperimentalAutonMap {
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        //get start heading and init variables
+        double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        double currentHeading;
+        double difference;
 
         // Declares target point storage variables
         int targetFL;
@@ -214,6 +218,13 @@ public class ExperimentalAutonMap {
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
+
+
+            //get current heading
+            currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+            difference = startHeading - currentHeading;
+
+            rotate(0.5, difference);
         }
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);
@@ -224,6 +235,73 @@ public class ExperimentalAutonMap {
         targetFR=0;
         targetRL=0;
         targetRR=0;
+    }
+
+    public void rotate(double speed, double angle) {
+
+        //this is a modified version of the other angle code
+        //instead of checking for clockwise or counterclockwise it checks +-
+        //+ is counterclockwise i think
+        //angle are absoluted before the loop that turns the bot runs because i didn't want to
+        //mess with that code
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
+        heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        heading = Math.floor(heading);
+        heading = Range.clip(heading, -180.0, 180.0);
+
+        //boolean beforeAngle = (direction.equals("cw") ? heading > angle | heading<angle);
+
+        if (angle<0) {
+            angle = Math.abs(angle);
+            while (Math.abs(heading) > angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
+
+            }
+        } else if (angle>0) {
+            angle = Math.abs(angle);
+            while (heading < angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                motorFR.setPower(speed);
+                motorFL.setPower(-speed);
+                motorRR.setPower(speed);
+                motorRL.setPower(-speed);
+            }
+        }
+
+        lastangle = heading;
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorRR.setPower(0);
+        motorRL.setPower(0);
     }
 
     public void rotate(String direction, double speed, double angle) {
@@ -290,7 +368,11 @@ public class ExperimentalAutonMap {
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //get start heading and init variables
+        double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        double currentHeading;
+        double difference;
 
         // Declares target point storage variables
         int targetFL;
@@ -324,6 +406,12 @@ public class ExperimentalAutonMap {
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
+
+            //get current heading
+            currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+            difference = startHeading - currentHeading;
+
+            rotate(0.5, difference);
         }
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);

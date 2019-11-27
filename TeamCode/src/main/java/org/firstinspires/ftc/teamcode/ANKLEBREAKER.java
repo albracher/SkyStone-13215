@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.opencv.core.Core;
@@ -33,9 +34,11 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "Skystone Detector", group="Sky autonomous")
-public class SkystoneDetector extends LinearOpMode {
+@TeleOp(name= "ANKLE BREAKER ANKLE BREAKER", group="ankle")
+public class ANKLEBREAKER extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
+
+    AutonMap robot = new AutonMap();
 
     //0 means skystone, 1 means yellow stone
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
@@ -59,8 +62,12 @@ public class SkystoneDetector extends LinearOpMode {
 
     OpenCvCamera phoneCam;
 
+    double speed = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
+
+        robot.init(hardwareMap);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -73,15 +80,60 @@ public class SkystoneDetector extends LinearOpMode {
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
+
+            if (gamepad1.a) {
+                telemetry.addData("Mode: ", "Lock Targets");
+                telemetry.update();
+                speed = 0.0;
+            }
+            if (gamepad1.x) {
+                telemetry.addData("Mode: ", "Chase");
+                telemetry.update();
+                speed = 0.25;
+            }
+            if (gamepad1.b) {
+                telemetry.addData("Mode: ", "Kill");
+                telemetry.update();
+                speed = 0.5;
+            }
+            if (gamepad1.y) {
+                telemetry.addData("Mode: ", "SUPER DUPER ULTRA ULTIMATE MEGA DEATH");
+                telemetry.update();
+                speed = 1;
+            }
+
+            //write actual auton in this loop
+
+            //drive towards scanning position
+            robot.drive(0.5, -1450);
+
+            //extend claw
+            robot.autonClaw.setPosition(0.5);
+
+            //prep clamp
+            robot.autonClamp.setPosition(0.95);
+
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
 
             telemetry.update();
-            sleep(100);
-            //call movement functions
-//            strafe(0.4, 200);
-//            moveDistance(0.4, 700);
+
+            //move based on camera readings
+
+            if(valMid<100){
+                //move forward if something is detected at mid
+                robot.motorFL.setPower(speed);
+                robot.motorFR.setPower(speed);
+                robot.motorRL.setPower(speed);
+                robot.motorRR.setPower(speed);
+            } else {
+                //otherwise just spin
+                robot.motorFL.setPower(0.25);
+                robot.motorFR.setPower(-0.25);
+                robot.motorRL.setPower(0.25);
+                robot.motorRR.setPower(-0.25);
+            }
 
         }
     }

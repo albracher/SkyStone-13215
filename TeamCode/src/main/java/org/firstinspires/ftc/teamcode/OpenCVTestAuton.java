@@ -33,9 +33,11 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "Skystone Detector", group="Sky autonomous")
-public class SkystoneDetector extends LinearOpMode {
+@Autonomous(name= "New CV Test", group="CV")
+public class OpenCVTestAuton extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
+
+    AutonMap robot = new AutonMap();
 
     //0 means skystone, 1 means yellow stone
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
@@ -62,6 +64,8 @@ public class SkystoneDetector extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        robot.init(hardwareMap);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();//open camera
@@ -73,15 +77,70 @@ public class SkystoneDetector extends LinearOpMode {
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
+
+            //write actual auton in this loop
+
+            //drive towards scanning position
+            robot.drive(0.5, -1450);
+
+            //extend claw
+            robot.autonClaw.setPosition(0.5);
+
+            //prep clamp
+            robot.autonClamp.setPosition(0.95);
+
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
 
             telemetry.update();
             sleep(100);
+
+            //move based on camera readings
+
+            if(valLeft<100){
+
+            } else if(valRight<100){
+
+            }
+
             //call movement functions
-//            strafe(0.4, 200);
-//            moveDistance(0.4, 700);
+
+            //rotate to grab
+            robot.rotate("ccw", 0.2, 173);
+            //approach stone
+            robot.drive(0.2, 350);
+            //grab
+            robot.autonClamp.setPosition(0.5);
+            sleep(250);
+            //raise
+            robot.autonClaw.setPosition(0.75);// S4: Stop and close the claw.
+            //reverse behind bridge
+            robot.drive(0.5, -1000);
+            //move through the bridge
+            robot.strafe(0.8, -6300);
+            //approach foundation
+            robot.drive(0.5, 1400);
+            //drops the block
+            robot.autonClamp.setPosition(0.95);
+            sleep(1000);
+            //moves away from the block
+//            robot.strafe(0.5, -500);
+//            sleep(250);
+//            //attach the arm to the foundation
+            robot.drive(0.5, -750);
+            robot.autonClamp.setPosition(0.3);
+            sleep(500);
+//            robot.autonClaw.setPosition(0.3);
+//            sleep(1000);
+//            //pull back foundation
+//            robot.drive(0.5, -2600);
+//            //push foundation into corner
+//            robot.rotate("cw",0.3,10);
+//            //clear claw for TeleOp
+            robot.autonClaw.setPosition(0.9);
+//            //move under bridge
+            robot.strafe(0.5,4100);
 
         }
     }
