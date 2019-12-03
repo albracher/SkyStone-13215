@@ -275,5 +275,43 @@ public class mecanumimu extends LinearOpMode {
     String formatDegrees(double degrees){
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
+
+    private void mecanum() {
+        if(driveMode == DriveMode.FIELD) {
+            double heading = imu.getHeading();
+            telemetry.addData("Heading", heading);
+
+            heading = Math.toRadians(heading);
+
+
+            if(heading > 0) {
+                //ccw
+                fwd = g1[1] * Math.cos(Math.abs(heading)) - g1[0] * Math.sin(Math.abs(heading));
+                strafe = g1[1] * Math.sin(Math.abs(heading)) + g1[0] * Math.cos(Math.abs(heading));
+            }
+            else {
+                //cw
+                fwd = g1[1] * Math.cos(Math.abs(heading)) + g1[0] * Math.sin(Math.abs(heading));
+                strafe = -g1[1] * Math.sin(Math.abs(heading)) + g1[0] * Math.cos(Math.abs(heading));
+            }
+
+            rotate = g1[2];
+
+            powFL = fwd + rotate + strafe;
+            powFR = fwd - rotate - strafe;
+            powBL = fwd + rotate - strafe;
+            powBR = fwd - rotate + strafe;
+
+        }
+        else {
+            //If the drive mode is Cartesian, we run the standard mecanum drive drive system
+
+            powFL = g1[1] + g1[2] + g1[0];
+            powFR = g1[1] - g1[2] - g1[0];
+            powBL = g1[1] + g1[2] - g1[0];
+            powBR = g1[1] - g1[2] + g1[0];
+
+        }
+    }
 }
     //idle();

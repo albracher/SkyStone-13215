@@ -67,10 +67,10 @@ public class TeleOpMap {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        motorFR = hwMap.get(DcMotor.class, "fr");
         motorFL = hwMap.get(DcMotor.class, "fl");
-        motorRR = hwMap.get(DcMotor.class, "rr");
+        motorFR = hwMap.get(DcMotor.class, "fr");
         motorRL = hwMap.get(DcMotor.class, "rl");
+        motorRR = hwMap.get(DcMotor.class, "rr");
         intakeL = hwMap.get(DcMotor.class, "il");
         intakeR = hwMap.get(DcMotor.class, "ir");
         armL = hwMap.get(DcMotor.class, "al");
