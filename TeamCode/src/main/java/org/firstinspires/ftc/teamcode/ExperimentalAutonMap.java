@@ -219,6 +219,7 @@ public class ExperimentalAutonMap {
             //i'm going to be using the front left motor to calculate this
             completion = (motorFL.getCurrentPosition()-initialFL)/(targetFL-initialFL);
             completion = (-4*Math.pow((completion-0.5),2)+1.25);
+            completion = Range.clip(completion, 0, 1);
             completion *= speed;
 
             motorFL.setPower(Math.abs(completion));
