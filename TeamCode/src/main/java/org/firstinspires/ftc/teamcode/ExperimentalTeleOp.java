@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 //*In theory* this should also be compatible with tank drive, except for the strafing parts
 
-@TeleOp(name = "Experimental TeleOp", group = "TeleOp")
+@TeleOp(name = "Super Highfalutin TeleOp", group = "sht")
 public class ExperimentalTeleOp extends LinearOpMode {
     BNO055IMU imu;
 
@@ -87,8 +87,6 @@ public class ExperimentalTeleOp extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
-        robot.autonClamp.setPosition(0.5);
-        robot.autonClaw.setPosition(0.5);
 
         waitForStart();
 
@@ -198,8 +196,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
                     *(gamepad2.right_trigger-gamepad2.left_trigger);
 
             //armSpeed is applied to motors
-            robot.armL.setPower(armSpeed);
-            robot.armR.setPower(armSpeed);
+            robot.slides.setPower(armSpeed);
 
             //Use LB and RB to open and close the claw
             if (gamepad2.right_bumper)
@@ -217,16 +214,17 @@ public class ExperimentalTeleOp extends LinearOpMode {
             else if (gamepad1.b)
                 clawOffset3 -= CLAW_SPEED;
 
+            if (gamepad1.dpad_up && !robot.slides.isBusy()){
+                robot.slide(1, 1000);
+            }
+            if (gamepad1.dpad_down && !robot.slides.isBusy()){
+                robot.slide(1, -1000);
+            }
+
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
             clawOffset2 = Range.clip(clawOffset2, -0.5, 0.5);
             clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
-
-
-            robot.claw.setPosition(robot.MID_SERVO + clawOffset);
-            robot.autonClaw.setPosition(robot.MID_SERVO + clawOffset2);
-            robot.autonClamp.setPosition(robot.MID_SERVO + clawOffset3);
-
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Power: " + drive + "        Turn: " + turn + "        Strafe: " + strafe + "\n" +

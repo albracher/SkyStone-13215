@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode;
 
 //Dpad Up = speed 100%
@@ -42,7 +43,9 @@ public class mecanumimu extends LinearOpMode {
     public static final double ARM_SPEED = 0.925;
     public static final double INTAKE_SPEED = 0.825;
 
-    /* Declare OpMode members. */
+    */
+/* Declare OpMode members. *//*
+
     TeleOpMap robot = new TeleOpMap();   //Configs hardware
 
 
@@ -315,3 +318,4 @@ public class mecanumimu extends LinearOpMode {
     }
 }
     //idle();
+*/

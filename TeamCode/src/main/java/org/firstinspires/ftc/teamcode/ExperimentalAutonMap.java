@@ -57,9 +57,6 @@ public class ExperimentalAutonMap {
     public DcMotor motorFL = null;
     public DcMotor motorRR = null;
     public DcMotor motorRL = null;
-    public Servo autonClaw    = null;
-    public Servo autonClamp    = null;
-    public Servo claw    = null;
     private double x = 0;
     private double y = 0;
 
@@ -119,9 +116,6 @@ public class ExperimentalAutonMap {
         motorFL = hwMap.get(DcMotor.class, "fl");
         motorRR = hwMap.get(DcMotor.class, "rr");
         motorRL = hwMap.get(DcMotor.class, "rl");
-        autonClamp  = hwMap.get(Servo.class, "a2");
-        autonClaw  = hwMap.get(Servo.class, "a1");
-        claw = hwMap.get(Servo.class, "c");
 
         motorFR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
         motorFL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward
@@ -181,10 +175,10 @@ public class ExperimentalAutonMap {
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //get start heading and init variables
+       /* //get start heading and init variables
         double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
         double currentHeading;
-        double difference;
+        double difference;*/
 
         // Declares target point storage variables
         int targetFL;
@@ -234,8 +228,8 @@ public class ExperimentalAutonMap {
 
 
             //get current heading
-            currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-            difference = startHeading - currentHeading;
+           /* currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+            difference = startHeading - currentHeading;*/
 
             //rotate(0.5, difference);
         }
@@ -383,9 +377,9 @@ public class ExperimentalAutonMap {
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //get start heading and init variables
-        double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+       /* double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
         double currentHeading;
-        double difference;
+        double difference;*/
 
         // Declares target point storage variables
         int targetFL;
@@ -421,10 +415,10 @@ public class ExperimentalAutonMap {
             // However, if you require that BOTH motors have finished their moves before the robot continues
 
             //get current heading
-            currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+           /* currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
             difference = startHeading - currentHeading;
 
-            rotate(0.5, difference);
+            rotate(0.5, difference);*/
         }
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);

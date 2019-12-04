@@ -15,11 +15,7 @@ public class TeleOpMap {
     public DcMotor motorRL = null;
     public DcMotor intakeL = null;
     public DcMotor intakeR = null;
-    public DcMotor armR = null;
-    public DcMotor armL = null;
-    public Servo claw    = null;
-    public Servo autonClaw    = null;
-    public Servo autonClamp    = null;
+    public DcMotor slides = null;
     public static final double MID_SERVO       =  0.5 ;
     static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
@@ -73,11 +69,7 @@ public class TeleOpMap {
         motorRR = hwMap.get(DcMotor.class, "rr");
         intakeL = hwMap.get(DcMotor.class, "il");
         intakeR = hwMap.get(DcMotor.class, "ir");
-        armL = hwMap.get(DcMotor.class, "al");
-        armR = hwMap.get(DcMotor.class, "ar");
-        claw  = hwMap.get(Servo.class, "c");
-        autonClamp  = hwMap.get(Servo.class, "a2");
-        autonClaw  = hwMap.get(Servo.class, "a1");
+        slides = hwMap.get(DcMotor.class, "s");
 
         motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.FORWARD);
@@ -85,8 +77,7 @@ public class TeleOpMap {
         motorRL.setDirection(DcMotor.Direction.FORWARD);
         intakeR.setDirection(DcMotor.Direction.FORWARD);
         intakeL.setDirection(DcMotor.Direction.REVERSE);
-        armL.setDirection(DcMotor.Direction.FORWARD);
-        armR.setDirection(DcMotor.Direction.REVERSE);
+        slides.setDirection(DcMotor.Direction.FORWARD);
 
 
         // Set all motors to zero power
@@ -96,8 +87,7 @@ public class TeleOpMap {
         motorRL.setPower(0);
         intakeR.setPower(0);
         intakeL.setPower(0);
-        armL.setPower(0);
-        armR.setPower(0);
+        slides.setPower(0);
 
         //set zero power behavior
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -106,8 +96,7 @@ public class TeleOpMap {
         motorRL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        armR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -116,54 +105,32 @@ public class TeleOpMap {
         motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        armR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Not using encoders for non drive train to allow for more direct control of power.
         //Arm uses encoders to make sure motors stay in sync
         //same with intake
     }
 
-    public void drive(double speed, int distance) {
+    public void slide(double speed, int distance) {
 
         // Resets encoder values so that it doesn't attempt to run to outdated values
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slides.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         // Declares target point storage variables
-        int targetFL;
-        int targetFR;
-        int targetRL;
-        int targetRR;
+        int targetS;
         // Determines new target position, and pass to motor controller
-        targetFL = motorFL.getCurrentPosition() + distance;
-        targetFR = motorFR.getCurrentPosition() + distance;
-        targetRL = motorRL.getCurrentPosition() + distance;
-        targetRR = motorRR.getCurrentPosition() + distance;
-        telemetry.addData("targetRL: ", targetRL);
-        telemetry.addData("targetRR: ", targetRR);
-        telemetry.addData("targetFL: ", targetFL);
-        telemetry.addData("targetFR: ", targetFR);
+        targetS = motorFL.getCurrentPosition() + distance;
+        telemetry.addData("targetS: ", targetS);
         telemetry.update();
-        motorFL.setTargetPosition(targetFL);
-        motorFR.setTargetPosition(targetFR);
-        motorRL.setTargetPosition(targetRL);
-        motorRR.setTargetPosition(targetRR);
+        slides.setTargetPosition(targetS);
 
         // Sets motors to run to a given encoder value
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slides.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Motors are set to run at a certain speed until one reaches its target position
-        while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
-            motorFL.setPower(Math.abs(speed));
-            motorFR.setPower(Math.abs(speed));
-            motorRL.setPower(Math.abs(speed));
-            motorRR.setPower(Math.abs(speed));
+        while (slides.isBusy()) {
+            slides.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -171,71 +138,7 @@ public class TeleOpMap {
             // However, if you require that BOTH motors have finished their moves before the robot continues
         }
         // The motors are shutdown when a motor gets to its target position
-        motorFL.setPower(0);
-        motorFR.setPower(0);
-        motorRL.setPower(0);
-        motorRR.setPower(0);
-        targetFL=0;
-        targetFR=0;
-        targetRL=0;
-        targetRR=0;
-    }
-
-    public void strafe(double speed, int distance) {
-
-        // Resets encoder values so that it doesn't attempt to run to outdated values
-        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        // Declares target point storage variables
-        int targetFL;
-        int targetFR;
-        int targetRL;
-        int targetRR;
-        // Determines new target position, and pass to motor controller
-        targetFL = motorFL.getCurrentPosition() + distance;
-        targetFR = motorFR.getCurrentPosition() - distance;
-        targetRL = motorRL.getCurrentPosition() - distance;
-        targetRR = motorRR.getCurrentPosition() + distance;
-        telemetry.addData("targetRL: ", targetRL);
-        telemetry.addData("targetRR: ", targetRR);
-        telemetry.addData("targetFL: ", targetFL);
-        telemetry.addData("targetFR: ", targetFR);
-        telemetry.update();
-        motorFL.setTargetPosition(targetFL);
-        motorFR.setTargetPosition(targetFR);
-        motorRL.setTargetPosition(targetRL);
-        motorRR.setTargetPosition(targetRR);
-
-        // Sets motors to run to a given encoder value
-        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // Motors are set to run at a certain speed until one reaches its target position
-        while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
-            motorFL.setPower(Math.abs(speed));
-            motorFR.setPower(Math.abs(speed));
-            motorRL.setPower(Math.abs(speed));
-            motorRR.setPower(Math.abs(speed));
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-        }
-        // The motors are shutdown when a motor gets to its target position
-        motorFL.setPower(0);
-        motorFR.setPower(0);
-        motorRR.setPower(0);
-        motorRL.setPower(0);
-
-        targetFL=0;
-        targetFR=0;
-        targetRL=0;
-        targetRR=0;
+        slides.setPower(0);
+        targetS=0;
     }
 }
