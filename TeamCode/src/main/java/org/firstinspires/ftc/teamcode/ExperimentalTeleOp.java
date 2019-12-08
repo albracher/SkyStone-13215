@@ -17,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class ExperimentalTeleOp extends LinearOpMode {
     BNO055IMU imu;
 
+
+
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
@@ -84,6 +86,9 @@ public class ExperimentalTeleOp extends LinearOpMode {
         int counterDownTighten = 0;
         int counterDownLoosen = 0;
 
+        //init servos
+        robot.pinion.setPower(0);
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
@@ -135,7 +140,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
                 }
                 if(turn>newTurn){
                     newTurn += 0.02;
-                } else if (drive<newTurn){
+                } else if (turn<newTurn){
                     newTurn -= 0.02;
                 }
             } else {
@@ -192,8 +197,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
             }
 
             //left and right trigger values are used to calculate armSpeed
-            armSpeed=0.25
-                    *(gamepad2.right_trigger-gamepad2.left_trigger);
+            armSpeed= 1 *(gamepad2.right_trigger-gamepad2.left_trigger);
 
             //armSpeed is applied to motors
             robot.slides.setPower(armSpeed);
@@ -221,10 +225,21 @@ public class ExperimentalTeleOp extends LinearOpMode {
                 robot.slide(1, -1000);
             }
 
+            //player 2 controls the pinion using triggers
+            robot.pinion.setPower(gamepad2.right_trigger-gamepad2.left_trigger);
+
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
             clawOffset2 = Range.clip(clawOffset2, -0.5, 0.5);
             clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
+
+            //player 2 controls claw with A and B
+            if(gamepad2.a){
+                robot.claw.setPosition(1);
+            }
+            if(gamepad2.b){
+                robot.claw.setPosition(0);
+            }
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Power: " + drive + "        Turn: " + turn + "        Strafe: " + strafe + "\n" +

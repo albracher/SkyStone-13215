@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,6 +17,10 @@ public class TeleOpMap {
     public DcMotor intakeL = null;
     public DcMotor intakeR = null;
     public DcMotor slides = null;
+    public Servo foundL;
+    public Servo foundR;
+    public CRServo pinion;
+    public Servo claw;
     public static final double MID_SERVO       =  0.5 ;
     static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
@@ -70,7 +75,11 @@ public class TeleOpMap {
         intakeL = hwMap.get(DcMotor.class, "il");
         intakeR = hwMap.get(DcMotor.class, "ir");
         slides = hwMap.get(DcMotor.class, "s");
-
+        foundL = hwMap.get(Servo.class, "fol");
+        foundR = hwMap.get(Servo.class, "for");
+        pinion = hwMap.get(CRServo.class, "p");
+        claw = hwMap.get(Servo.class, "c");
+   
         motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.FORWARD);
         motorRR.setDirection(DcMotor.Direction.REVERSE);
@@ -78,6 +87,10 @@ public class TeleOpMap {
         intakeR.setDirection(DcMotor.Direction.FORWARD);
         intakeL.setDirection(DcMotor.Direction.REVERSE);
         slides.setDirection(DcMotor.Direction.FORWARD);
+        foundL.setDirection(Servo.Direction.FORWARD);
+        foundR.setDirection(Servo.Direction.REVERSE);
+        pinion.setDirection(CRServo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.FORWARD);
 
 
         // Set all motors to zero power
@@ -121,8 +134,6 @@ public class TeleOpMap {
         int targetS;
         // Determines new target position, and pass to motor controller
         targetS = motorFL.getCurrentPosition() + distance;
-        telemetry.addData("targetS: ", targetS);
-        telemetry.update();
         slides.setTargetPosition(targetS);
 
         // Sets motors to run to a given encoder value
