@@ -94,11 +94,9 @@ public class BlueDepotNew extends LinearOpMode {
        // do vision adjustment here
 
         if(valLeft==0){
-            robot.strafe(1, 500);
+            robot.strafe(1, 600);
         } else if (valRight==0){
-            robot.strafe(1, -500);
-        } else {
-
+            robot.strafe(1, -600);
         }
 
             //rotate to grab
