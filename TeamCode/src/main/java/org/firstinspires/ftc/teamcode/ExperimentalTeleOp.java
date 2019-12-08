@@ -183,23 +183,17 @@ public class ExperimentalTeleOp extends LinearOpMode {
             robot.motorRR.setPower(powerRR);
 
             //rear right motor test while buttons are held
-            while (gamepad2.a){
+            while (gamepad1.a){
                 robot.intakeL.setPower(0.9);
                 robot.intakeR.setPower(0.9);
-                robot.intakeSL.setPower(0.9);
-                robot.intakeSR.setPower(0.9);
             }
-            while(gamepad2.b) {
+            while(gamepad1.b) {
                 robot.intakeL.setPower(-0.9);
                 robot.intakeR.setPower(-0.9);
-                robot.intakeSL.setPower(-0.9);
-                robot.intakeSR.setPower(-0.9);
             }
-            while(gamepad2.x){
+            while(gamepad1.x){
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
-                robot.intakeSL.setPower(0);
-                robot.intakeSR.setPower(0);
             }
 
             //left and right trigger values are used to calculate armSpeed
@@ -233,7 +227,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
             }
 
             //player 2 controls the pinion using right stick
-            robot.pinion.setPower(-gamepad2.right_stick_y);
+            robot.pinion.setPower(gamepad2.right_stick_y);
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
@@ -246,6 +240,12 @@ public class ExperimentalTeleOp extends LinearOpMode {
             }
             if(gamepad2.b){
                 robot.claw.setPosition(0);
+            }
+            if(gamepad2.x){
+                robot.intakeSR.setPosition(1);
+            }
+            if(gamepad2.y){
+                robot.intakeSR.setPosition(0);
             }
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +

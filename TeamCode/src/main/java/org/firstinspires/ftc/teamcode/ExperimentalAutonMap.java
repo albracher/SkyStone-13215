@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -57,6 +58,15 @@ public class ExperimentalAutonMap {
     public DcMotor motorFL = null;
     public DcMotor motorRR = null;
     public DcMotor motorRL = null;
+    public DcMotor intakeL = null;
+    public DcMotor intakeR = null;
+    public DcMotor slides = null;
+    public Servo foundL;
+    public Servo foundR;
+    public CRServo pinion;
+    public Servo claw;
+    public Servo intakeSR;
+    public Servo marker;
     private double x = 0;
     private double y = 0;
 
@@ -112,33 +122,64 @@ public class ExperimentalAutonMap {
         imu.initialize(parameters);
 
         // Define and Initialize Motors
-        motorFR = hwMap.get(DcMotor.class, "fr");
         motorFL = hwMap.get(DcMotor.class, "fl");
-        motorRR = hwMap.get(DcMotor.class, "rr");
+        motorFR = hwMap.get(DcMotor.class, "fr");
         motorRL = hwMap.get(DcMotor.class, "rl");
+        motorRR = hwMap.get(DcMotor.class, "rr");
+        intakeL = hwMap.get(DcMotor.class, "il");
+        intakeR = hwMap.get(DcMotor.class, "ir");
+        slides = hwMap.get(DcMotor.class, "s");
+        foundL = hwMap.get(Servo.class, "fol");
+        foundR = hwMap.get(Servo.class, "for");
+        pinion = hwMap.get(CRServo.class, "p");
+        claw = hwMap.get(Servo.class, "c");
+        intakeSR = hwMap.get(Servo.class, "isr");
+        marker = hwMap.get(Servo.class, "m");
 
-        motorFR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
-        motorFL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward
-        motorRR.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if motors are facing outward
-        motorRL.setDirection(DcMotor.Direction.REVERSE); // Set to FORWARD if motors are facing outward
+        motorFR.setDirection(DcMotor.Direction.REVERSE);
+        motorFL.setDirection(DcMotor.Direction.FORWARD);
+        motorRR.setDirection(DcMotor.Direction.REVERSE);
+        motorRL.setDirection(DcMotor.Direction.FORWARD);
+        intakeR.setDirection(DcMotor.Direction.FORWARD);
+        intakeL.setDirection(DcMotor.Direction.REVERSE);
+        slides.setDirection(DcMotor.Direction.FORWARD);
+        foundL.setDirection(Servo.Direction.FORWARD);
+        foundR.setDirection(Servo.Direction.REVERSE);
+        pinion.setDirection(CRServo.Direction.FORWARD);
+        claw.setDirection(Servo.Direction.FORWARD);
+        intakeSR.setDirection(Servo.Direction.FORWARD);
+        marker.setDirection(Servo.Direction.FORWARD);
 
-        // Sets zero power behavior to brake for more precise movement
-        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Resets encoder values to prevent the robot from freaking out as soon as we init
-        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set all motors to zero power
         motorFR.setPower(0);
         motorFL.setPower(0);
         motorRR.setPower(0);
         motorRL.setPower(0);
+        intakeR.setPower(0);
+        intakeL.setPower(0);
+        slides.setPower(0);
+
+        //set zero power behavior
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorRR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorRL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        slides.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Set all motors to run without encoders.
+        // May want to use RUN_USING_ENCODER if encoders are installed.
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //Not using encoders for non drive train to allow for more direct control of power.
+        //Arm uses encoders to make sure motors stay in sync
+        //same with intake
 
 
     }

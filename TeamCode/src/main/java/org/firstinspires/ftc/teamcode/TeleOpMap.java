@@ -21,8 +21,8 @@ public class TeleOpMap {
     public Servo foundR;
     public CRServo pinion;
     public Servo claw;
-    public CRServo intakeSL;
-    public CRServo intakeSR;
+    public Servo intakeSR;
+    public Servo marker;
     public static final double MID_SERVO       =  0.5 ;
     static final int COUNTS_PER_MOTOR_REV = 2240;    // eg: Andymark Motor Encoder (40:1)
     static final double DRIVE_GEAR_REDUCTION = 15/20;     // This is < 1.0 if geared UP
@@ -34,26 +34,6 @@ public class TeleOpMap {
     int OFFSET = 0;
     public static final double DRIVE_SPEED = 0.5;
     //counts per inch: 189.072002609
-
-
-    //public ColorSensor colorSensor;//legacy code, can be removed
-
-    //YellowJacket for Close
-    //NeverRest for Open
-
-    //NeverRest 40 motor: Diameter = 0.85 inches
-    //NeverREST: 120 rpm
-    //Circumference = 2.669 inches
-    //NeverRest: IPM: 320.28 inches/min
-    //GoBilda Yellow Jacket motor: Diameter = 1 inch
-    //GoBilda: 84 rpm
-    //Circumference: 3.14 inches
-    //GoBilda: IPM: 263.76 inches/min
-    //YellowJacket is close
-    //NeverRest is open
-    //Run NeverRest at 82.35% to get same power
-    //copied stuff from AutonMap
-
 
     /* local OpMode members. */
     HardwareMap hwMap = null;
@@ -81,8 +61,8 @@ public class TeleOpMap {
         foundR = hwMap.get(Servo.class, "for");
         pinion = hwMap.get(CRServo.class, "p");
         claw = hwMap.get(Servo.class, "c");
-        intakeSL = hwMap.get(CRServo.class, "isl");
-        intakeSR = hwMap.get(CRServo.class, "isr");
+        intakeSR = hwMap.get(Servo.class, "isr");
+        marker = hwMap.get(Servo.class, "m");
 
         motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.FORWARD);
@@ -95,8 +75,8 @@ public class TeleOpMap {
         foundR.setDirection(Servo.Direction.REVERSE);
         pinion.setDirection(CRServo.Direction.FORWARD);
         claw.setDirection(Servo.Direction.FORWARD);
-        intakeSL.setDirection(CRServo.Direction.FORWARD);
-        intakeSR.setDirection(CRServo.Direction.REVERSE);
+        intakeSR.setDirection(Servo.Direction.FORWARD);
+        marker.setDirection(Servo.Direction.FORWARD);
 
 
         // Set all motors to zero power

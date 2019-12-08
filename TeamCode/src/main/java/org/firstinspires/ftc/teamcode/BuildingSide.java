@@ -15,7 +15,7 @@ import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 
 public class BuildingSide extends LinearOpMode {
 
-    AutonMap robot = new AutonMap();
+    ExperimentalAutonMap robot = new ExperimentalAutonMap();
 
 /*
     private GoldAlignDetector detector;
@@ -36,33 +36,26 @@ public class BuildingSide extends LinearOpMode {
         robot.motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //set servo starting positions
-
-        robot.autonClaw.setPosition(0.55);
-
-        robot.autonClamp.setPosition(0.9);
-
         //send telemetry
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
+
+        robot.foundL.setPosition(0);
+        robot.foundR.setPosition(0);
 
         waitForStart();
 
 
         //move forward to foundation
         robot.drive(DRIVE_SPEED, 2100);
-
-        sleep(250);
         //attach the arm to the foundation
-        robot.autonClamp.setPosition(0.7);
-        robot.autonClaw.setPosition(0.3);
-        sleep(1000);
+        robot.foundL.setPosition(1);
+        robot.foundR.setPosition(1);
         //pull back foundation
         robot.drive(0.5, -2350);
-        //push foundation into corner
-        robot.rotate("cw",0.3,10);
-        //clear claw for TeleOp
-        robot.autonClaw.setPosition(0.7);
+        //let go
+        robot.foundL.setPosition(0);
+        robot.foundR.setPosition(0);
         //move under bridge
         robot.strafe(0.5,3550);
 

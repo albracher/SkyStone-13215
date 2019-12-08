@@ -75,7 +75,7 @@ public class BlueDepotNew extends LinearOpMode {
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();//open camera
         phoneCam.setPipeline(new SkystoneDetector.StageSwitchingPipeline());//different stages
-        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
+        phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.SIDEWAYS_LEFT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
