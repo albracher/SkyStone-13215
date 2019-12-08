@@ -11,9 +11,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-/*
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
-*/
 
 @Autonomous(name="Red Depot Finals", group="autonomous")
 
@@ -157,10 +154,6 @@ public class RedDepotFinals extends LinearOpMode {
                 }
                 telemetry.update();
             }
-
-
-            // Play the audio
-            //SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
 
             //rotate to grab
             robot.rotate("ccw", 0.2, 173);

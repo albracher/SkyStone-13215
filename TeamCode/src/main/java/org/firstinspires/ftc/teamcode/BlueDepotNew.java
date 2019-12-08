@@ -1,11 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.opencv.core.Core;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+
+import java.util.ArrayList;
+import java.util.List;import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
@@ -17,25 +23,19 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
+/*
+import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
+*/
 
-import java.util.ArrayList;
-import java.util.List;
+@Autonomous(name="New Blue Depot", group="shart")
 
+/* Declare OpMode members. */
 
-/**
- * nerverest ticks
- * 60 1680
- * 40 1120
- * 20 560
- *
- * monitor: 640 x 480
- *YES
- */
-@Autonomous(name= "New CV Test", group="CV")
-public class OpenCVTestAuton extends LinearOpMode {
+public class BlueDepotNew extends LinearOpMode {
+
+    ExperimentalAutonMap robot = new ExperimentalAutonMap();
+
     private ElapsedTime runtime = new ElapsedTime();
-
-    AutonMap robot = new AutonMap();
 
     //0 means skystone, 1 means yellow stone
     //-1 for debug, but we can keep it like this because if it works, it should change to either 0 or 255
@@ -59,89 +59,87 @@ public class OpenCVTestAuton extends LinearOpMode {
 
     OpenCvCamera phoneCam;
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+    public static double DRIVE_SPEED = 0.5;
 
-        robot.init(hardwareMap);
+    /*
+    tile size is 24 inches
+    660 counts of encoder = 4 inches
+    1 inch = 165 counts
+    */
+
+    @Override
+
+    public void runOpMode() {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();//open camera
-        phoneCam.setPipeline(new StageSwitchingPipeline());//different stages
+        phoneCam.setPipeline(new SkystoneDetector.StageSwitchingPipeline());//different stages
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
+        robot.init(hardwareMap);
+
+        //send telemetry
+        telemetry.addData("Status", "Ready to run Test Autonomous");
+        telemetry.update();
+
+
         waitForStart();
-        runtime.reset();
-        while (opModeIsActive()) {
 
-            //write actual auton in this loop
+        //drive towards scanning position
+        robot.drive(0.5, -1450);
 
-            //drive towards scanning position
-            robot.drive(0.5, -1450);
+       // do vision adjustment here
 
-            //extend claw
-            robot.autonClaw.setPosition(0.5);
+        if(valLeft==0){
+            robot.strafe(1, 500);
+        } else if (valRight==0){
+            robot.strafe(1, -500);
+        } else {
 
-            //prep clamp
-            robot.autonClamp.setPosition(0.95);
-
-            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
-            telemetry.addData("Height", rows);
-            telemetry.addData("Width", cols);
-
-            telemetry.update();
-            sleep(100);
-
-            //move based on camera readings
-
-            if(valLeft<100){
-
-            } else if(valRight<100){
-
-            }
-
-            //call movement functions
+        }
 
             //rotate to grab
-            robot.rotate("ccw", 0.2, 173);
+            robot.rotate("cw", 0.2, 45);
             //approach stone
-            robot.drive(0.2, 350);
+            robot.drive(0.2, -350);
             //grab
-            robot.autonClamp.setPosition(0.5);
-            sleep(250);
+
             //raise
-            robot.autonClaw.setPosition(0.75);// S4: Stop and close the claw.
+
             //reverse behind bridge
-            robot.drive(0.5, -1000);
+            robot.drive(0.5, 11000);
             //move through the bridge
             robot.strafe(0.8, -6300);
             //approach foundation
-            robot.drive(0.5, 1400);
+            robot.drive(0.5, -1400);
             //drops the block
-            robot.autonClamp.setPosition(0.95);
-            sleep(1000);
+
             //moves away from the block
-//            robot.strafe(0.5, -500);
+//            robot.strafe(0.5, 500);
 //            sleep(250);
 //            //attach the arm to the foundation
-            robot.drive(0.5, -750);
-            robot.autonClamp.setPosition(0.3);
-            sleep(500);
+//            robot.autonClamp.setPosition(0.7);
 //            robot.autonClaw.setPosition(0.3);
 //            sleep(1000);
 //            //pull back foundation
-//            robot.drive(0.5, -2600);
+//            robot.drive(0.5, -2550);
 //            //push foundation into corner
-//            robot.rotate("cw",0.3,10);
+//
 //            //clear claw for TeleOp
-            robot.autonClaw.setPosition(0.9);
+
 //            //move under bridge
-            robot.strafe(0.5,4100);
+            robot.strafe(0.5,-4100);
+
+
+            telemetry.addData("Status", "Autonmous Complete");
+            telemetry.update();
+
+            //ONE TILE IS 24 INCHES X 24 INCHES
 
         }
-    }
 
     //detection pipeline
     static class StageSwitchingPipeline extends OpenCvPipeline
@@ -158,8 +156,8 @@ public class OpenCVTestAuton extends LinearOpMode {
             RAW_IMAGE,//displays raw view
         }
 
-        private Stage stageToRenderToViewport = Stage.detection;
-        private Stage[] stages = Stage.values();
+        private SkystoneDetector.StageSwitchingPipeline.Stage stageToRenderToViewport = SkystoneDetector.StageSwitchingPipeline.Stage.detection;
+        private SkystoneDetector.StageSwitchingPipeline.Stage[] stages = SkystoneDetector.StageSwitchingPipeline.Stage.values();
 
         @Override
         public void onViewportTapped()
@@ -267,6 +265,11 @@ public class OpenCVTestAuton extends LinearOpMode {
                     return all;
                 }
 
+                case RAW_IMAGE:
+                {
+                    return input;
+                }
+
                 default:
                 {
                     return input;
@@ -275,4 +278,6 @@ public class OpenCVTestAuton extends LinearOpMode {
         }
 
     }
-}
+
+
+    }
