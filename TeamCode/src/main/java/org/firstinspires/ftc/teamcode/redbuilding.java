@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,11 +8,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Building Side", group="autonomous")
+@Autonomous(name="Blue Building Side", group="autonomous")
 
 /* Declare OpMode members. */
 
-public class BuildingSide extends LinearOpMode {
+public class redbuilding extends LinearOpMode {
 
     ExperimentalAutonMap robot = new ExperimentalAutonMap();
 
@@ -48,11 +47,10 @@ public class BuildingSide extends LinearOpMode {
 
         //move forward to foundation
         robot.drive(1, -2200);
-        robot.strafe(1,-1600);
+        robot.strafe(1,1500);
         //attach the arm to the foundation
         robot.foundL.setPosition(1);
         robot.foundR.setPosition(1);
-        robot.strafe(1,-200);
         sleep(2000);
         //pull back foundation
 
@@ -63,7 +61,7 @@ public class BuildingSide extends LinearOpMode {
         robot.foundL.setPosition(0);
         robot.foundR.setPosition(0);
         sleep(1000);
-        robot.strafe(1,5000);
+        robot.strafe(1,-5000);
         //move under bridge
 
 

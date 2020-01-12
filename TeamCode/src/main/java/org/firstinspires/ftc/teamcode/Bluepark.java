@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,11 +8,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Building Side", group="autonomous")
+@Autonomous(name="Blue Park", group="autonomous")
 
 /* Declare OpMode members. */
 
-public class BuildingSide extends LinearOpMode {
+public class Bluepark extends LinearOpMode {
 
     ExperimentalAutonMap robot = new ExperimentalAutonMap();
 
@@ -44,27 +43,26 @@ public class BuildingSide extends LinearOpMode {
         robot.foundR.setPosition(0.2);
 //
         waitForStart();
+//        //move forward to foundation
+//        robot.drive(1, -2100);
+//        robot.strafe(1,-800);
+//        //attach the arm to the foundation
+//        robot.foundL.setPosition(1);
+//        robot.foundR.setPosition(1);
+//        sleep(2000);
+//        //pull back foundation
+//
+//        robot.drive(1, 1500);
 
 
-        //move forward to foundation
-        robot.drive(1, -2200);
-        robot.strafe(1,-1600);
-        //attach the arm to the foundation
-        robot.foundL.setPosition(1);
-        robot.foundR.setPosition(1);
-        robot.strafe(1,-200);
-        sleep(2000);
-        //pull back foundation
-
-        robot.drive(1, 2300);
-
+        robot.drive(1,-3000);
 
         //let go
-        robot.foundL.setPosition(0);
-        robot.foundR.setPosition(0);
-        sleep(1000);
-        robot.strafe(1,5000);
-        //move under bridge
+//        robot.foundL.setPosition(0);
+//        robot.foundR.setPosition(0);
+//        sleep(1000);
+//        robot.drive(1,3550);
+//        //move under bridge
 
 
 

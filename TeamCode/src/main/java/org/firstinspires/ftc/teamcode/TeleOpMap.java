@@ -71,11 +71,11 @@ public class TeleOpMap {
         intakeR.setDirection(DcMotor.Direction.FORWARD);
         intakeL.setDirection(DcMotor.Direction.REVERSE);
         slides.setDirection(DcMotor.Direction.FORWARD);
-        foundL.setDirection(Servo.Direction.FORWARD);
-        foundR.setDirection(Servo.Direction.REVERSE);
+        foundL.setDirection(Servo.Direction.REVERSE);
+        foundR.setDirection(Servo.Direction.FORWARD);
         pinion.setDirection(CRServo.Direction.FORWARD);
         claw.setDirection(Servo.Direction.FORWARD);
-        intakeSR.setDirection(Servo.Direction.FORWARD);
+        intakeSR.setDirection(Servo.Direction.REVERSE);
         marker.setDirection(Servo.Direction.FORWARD);
 
 

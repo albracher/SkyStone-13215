@@ -89,7 +89,7 @@ public class BlueDepotNew extends LinearOpMode {
         waitForStart();
 
         //drive towards scanning position
-        robot.drive(0.5, -1450);
+        robot.drive(1, -1450);
 
        // do vision adjustment here
 
@@ -102,17 +102,17 @@ public class BlueDepotNew extends LinearOpMode {
             //rotate to grab
             robot.rotate("cw", 0.2, 45);
             //approach stone
-            robot.drive(0.2, -350);
+            robot.drive(1, -350);
             //grab
 
             //raise
 
             //reverse behind bridge
-            robot.drive(0.5, 11000);
+            robot.drive(1, 11000);
             //move through the bridge
-            robot.strafe(0.8, -6300);
+            robot.strafe(1, -6300);
             //approach foundation
-            robot.drive(0.5, -1400);
+            robot.drive(1, -1400);
             //drops the block
 
             //moves away from the block
@@ -129,7 +129,7 @@ public class BlueDepotNew extends LinearOpMode {
 //            //clear claw for TeleOp
 
 //            //move under bridge
-            robot.strafe(0.5,-4100);
+            robot.strafe(1,-4100);
 
 
             telemetry.addData("Status", "Autonmous Complete");
