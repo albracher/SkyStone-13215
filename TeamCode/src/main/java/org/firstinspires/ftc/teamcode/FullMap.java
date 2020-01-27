@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class TeleOpMap {
+public class FullMap {
     /* Public OpMode members. */
     public DcMotor motorFR = null;
     public DcMotor motorFL = null;
@@ -41,7 +41,7 @@ public class TeleOpMap {
     private Telemetry telemetry;
 
     /* Constructor */
-    public TeleOpMap() {
+    public FullMap() {
     }
 
     /* Initialize standard Hardware interfaces */

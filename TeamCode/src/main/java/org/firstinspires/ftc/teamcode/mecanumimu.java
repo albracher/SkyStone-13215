@@ -46,7 +46,7 @@ public class mecanumimu extends LinearOpMode {
     */
 /* Declare OpMode members. *//*
 
-    TeleOpMap robot = new TeleOpMap();   //Configs hardware
+    FullMap robot = new FullMap();   //Configs hardware
 
 
     //NeverRest 40 motor: Diameter = 0.85 inches

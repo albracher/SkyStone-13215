@@ -27,7 +27,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
     public static final double INTAKE_SPEED = 0.825;
 
     /* Declare OpMode members. */
-    TeleOpMap robot = new TeleOpMap();   //Configs hardware
+    FullMap robot = new FullMap();   //Configs hardware
 
 
     //NeverRest 40 motor: Diameter = 0.85 inches
