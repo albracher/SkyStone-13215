@@ -18,6 +18,7 @@ import java.util.*;
 import static java.lang.Thread.sleep;
 
 public class FullMap {
+
     //TODO: Add back rotate function, try to make drive and strafe more accurate
 
     /* Public OpMode members. */
@@ -273,20 +274,34 @@ public class FullMap {
     }
 
 
-    public void initialApproach(int x){
-
+    public void initialApproach(int y){
+        int x = 1450;
+        x*=y;
+        strafe(1,x);
     }
 
-    public void approachStone(int x){
-        
+    public void approachStone(int y){
+        int x = 350;
+        x*=y;
+        strafe(1,x);
     }
 
-    public void cross(int x){
-
+    public void bridgeAlignment(int y){
+        int x = -1000;
+        x*=y;
+        strafe(1,x);
     }
 
-    public void park(int x){
+    public void cross(int y){
+        int x = 6300;
+        x*=y;
+        drive(1,x);
+    }
 
+    public void park(int y){
+        int x = -4100;
+        x*=y;
+        drive(1,x);
     }
 
     public void foundationGrab(){
@@ -300,4 +315,3 @@ public class FullMap {
     }
 
 }
-

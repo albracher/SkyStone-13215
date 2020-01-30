@@ -61,7 +61,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
         imu.initialize(parameters);
         //loads hardwareMap
 
-        boolean adjustedInput = true;
+        boolean adjustedInput = false;
         double drive;
         double turn;
         double strafe;
@@ -147,6 +147,9 @@ public class ExperimentalTeleOp extends LinearOpMode {
                     newTurn -= 0.06;
                 }
             } else {
+                drive=Math.pow(drive,3);
+                strafe=Math.pow(strafe,3);
+                turn=Math.pow(turn,3);
                 newDrive = drive;
                 newStrafe = strafe;
                 newTurn = turn;

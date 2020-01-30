@@ -106,7 +106,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             //grab
             robot.autonGrab();
             //reverse behind bridge
-            robot.approachStone(0);
+            robot.bridgeAlignment(1);
             //move through the bridge
             robot.cross(1);
             //approach foundation
@@ -116,13 +116,13 @@ public class OpenCVTestAuton extends LinearOpMode {
             sleep(1000);
             //attach the arm to the foundation
             robot.foundationGrab();
-            robot.approachStone(0);
-            robot.initialApproach(0);
+            robot.bridgeAlignment(-1);
+            robot.initialApproach(-1);
             robot.foundationRelease();
             sleep(500);
             //reset claw
             robot.autonGrab();
-//            //move under bridge
+            //move under bridge
             robot.park(1);
         }
     }
