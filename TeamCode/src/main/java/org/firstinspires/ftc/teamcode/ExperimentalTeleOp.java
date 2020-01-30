@@ -224,11 +224,9 @@ public class ExperimentalTeleOp extends LinearOpMode {
             //player 2 controls claw with A and B
             if(gamepad2.a||gamepad1.a){
                 robot.claw.setPosition(0);
-                robot.intakeSR.setPosition(0);
             }
             if(gamepad2.b||gamepad1.b){
                 robot.claw.setPosition(1);
-                robot.intakeSR.setPosition(1);
             }
             if(gamepad2.x){
 
