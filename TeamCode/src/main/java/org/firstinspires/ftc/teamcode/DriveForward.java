@@ -54,17 +54,17 @@ public class DriveForward extends LinearOpMode {
         telemetry.update();
 
         //move forward to foundation
-        robot.motorFL.setPower(1);
-        robot.motorFR.setPower(1);
-        robot.motorRL.setPower(1);
-        robot.motorRR.setPower(1);
+        robot.motorFL.setPower(0.5);
+        robot.motorFR.setPower(0.5);
+        robot.motorRL.setPower(0.5);
+        robot.motorRR.setPower(0.5);
         telemetry.addData("STATUS", "ALL MOTORS SET TO 0.5 POWER");
         telemetry.update();
         sleep(10000);
-        robot.motorFL.setPower(-0.75);
-        robot.motorFR.setPower(-0.75);
-        robot.motorRL.setPower(-0.75);
-        robot.motorRR.setPower(-0.75);
+        robot.motorFL.setPower(-0.5);
+        robot.motorFR.setPower(-0.5);
+        robot.motorRL.setPower(-0.5);
+        robot.motorRR.setPower(-0.5);
         telemetry.addData("STATUS", "ALL MOTORS SET TO -0.5 POWER");
         telemetry.update();
 
