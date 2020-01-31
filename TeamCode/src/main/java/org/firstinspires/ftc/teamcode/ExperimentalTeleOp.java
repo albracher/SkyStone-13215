@@ -200,11 +200,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
                 robot.intakeR.setPower(0);
             }
             if (gamepad1.dpad_up) {
-                robot.pinion.setPower(1);
+                robot.slides.setPower(1);
                 if (gamepad1.dpad_down) {
-                    robot.pinion.setPower(-1);
+                    robot.slides.setPower(-1);
                 } else {
-                    robot.pinion.setPower(0);
+                    robot.slides.setPower(0);
                 }
             }
             while (gamepad1.dpad_left) {
@@ -223,7 +223,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
             armSpeed = 1 * (gamepad2.right_trigger - gamepad2.left_trigger);
 
             //armSpeed is applied to motors
-            robot.slides.setPower(armSpeed);
+            robot.pinion.setPower(armSpeed);
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);

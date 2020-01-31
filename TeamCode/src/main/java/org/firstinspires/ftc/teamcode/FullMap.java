@@ -119,7 +119,7 @@ public class FullMap {
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slides.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //Not using encoders for non drive train to allow for more direct control of power.
-        //Arm uses encoders to make sure motors stay in sync
+        //Arm uses encoders to make sure moto]/rs stay in sync
         //same with intake
     }
 
