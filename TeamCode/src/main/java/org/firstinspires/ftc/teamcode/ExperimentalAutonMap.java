@@ -143,8 +143,8 @@ public class ExperimentalAutonMap {
         intakeR.setDirection(DcMotor.Direction.FORWARD);
         intakeL.setDirection(DcMotor.Direction.REVERSE);
         slides.setDirection(DcMotor.Direction.FORWARD);
-        foundL.setDirection(Servo.Direction.REVERSE);
-        foundR.setDirection(Servo.Direction.FORWARD);
+        foundL.setDirection(Servo.Direction.FORWARD);
+        foundR.setDirection(Servo.Direction.REVERSE);
         pinion.setDirection(CRServo.Direction.FORWARD);
         claw.setDirection(Servo.Direction.FORWARD);
         intakeSR.setDirection(Servo.Direction.FORWARD);

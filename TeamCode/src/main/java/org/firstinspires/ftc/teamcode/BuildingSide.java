@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Red Building Side", group="autonomous")
+@Autonomous(name="Building Side (Universal)", group="autonomous")
 
 /* Declare OpMode members. */
 
@@ -40,36 +40,27 @@ public class BuildingSide extends LinearOpMode {
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
 
-        robot.foundL.setPosition(0.2);
-        robot.foundR.setPosition(0.2);
-//
+        robot.foundL.setPosition(0);
+        robot.foundR.setPosition(0);
+
         waitForStart();
 
 
         //move forward to foundation
-        robot.drive(1, -2200);
-        robot.strafe(1,-1600);
+        robot.drive(DRIVE_SPEED, 2100);
         //attach the arm to the foundation
         robot.foundL.setPosition(1);
         robot.foundR.setPosition(1);
-        robot.strafe(1,-200);
-        sleep(2000);
         //pull back foundation
-
-        robot.drive(1, 2300);
-
-
+        robot.drive(0.5, -2350);
         //let go
         robot.foundL.setPosition(0);
         robot.foundR.setPosition(0);
-        sleep(1000);
-        robot.strafe(1,5000);
         //move under bridge
+        robot.strafe(0.5,3550);
 
 
-
-        telemetry.addData("Status", "Auton complete.");
-
+        telemetry.addData("Status", "I've got a good lock! Firing!");
 
         telemetry.update();
 

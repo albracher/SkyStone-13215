@@ -96,6 +96,10 @@ public class ExperimentalTeleOp extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of a4f8d46... 2nd comp update
         waitForStart();
 
         // Start the logging of measured acceleration
@@ -105,13 +109,28 @@ public class ExperimentalTeleOp extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()) {
+<<<<<<< HEAD
+=======
+            //speed is
+            //LS is fast, RS is half speed
+            if (gamepad1.left_stick_button) {
+                adjustedInput = false;
+                speed = 0.25;
+            }
+            if (gamepad1.right_stick_button) {
+                adjustedInput = true;
+                speed = 1;
+            }
+
+
+>>>>>>> parent of a4f8d46... 2nd comp update
 
             // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
             // This way it's also easy to just drive straight, or just turn.
             drive = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
-            strafe = -gamepad1.left_stick_x;
+            strafe = gamepad1.left_stick_x;
 
             /*adjusted input here is meant to make robot movement less jerky
             it basically works by forcing the robot to change speed at a certain rate
@@ -119,6 +138,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
              */
 
             if (adjustedInput) {
+<<<<<<< HEAD
                 if (drive > newDrive) {
                     newDrive += 0.06;
                 } else if (drive < newDrive) {
@@ -133,6 +153,22 @@ public class ExperimentalTeleOp extends LinearOpMode {
                     newTurn += 0.06;
                 } else if (turn < newTurn) {
                     newTurn -= 0.06;
+=======
+                if(drive>newDrive){
+                    newDrive += 0.02;
+                } else if (drive<newDrive){
+                    newDrive -= 0.02;
+                }
+                if(strafe>newStrafe){
+                    newStrafe += 0.02;
+                } else if (strafe<newStrafe){
+                    newStrafe -= 0.02;
+                }
+                if(turn>newTurn){
+                    newTurn += 0.02;
+                } else if (turn<newTurn){
+                    newTurn -= 0.02;
+>>>>>>> parent of a4f8d46... 2nd comp update
                 }
             } else {
                 drive = Math.pow(drive, 3);
@@ -195,6 +231,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
+<<<<<<< HEAD
             while (gamepad1.y) {
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
@@ -210,6 +247,33 @@ public class ExperimentalTeleOp extends LinearOpMode {
             while (gamepad1.dpad_left) {
             }
             while (gamepad1.dpad_right) {
+=======
+
+            //left and right trigger values are used to calculate armSpeed
+            armSpeed= 1 *(gamepad2.right_trigger-gamepad2.left_trigger);
+
+            //armSpeed is applied to motors
+            robot.slides.setPower(armSpeed);
+
+            //Use LB and RB to open and close the claw
+            if (gamepad2.right_bumper)
+                clawOffset += CLAW_SPEED;
+            else if (gamepad2 .left_bumper)
+                clawOffset -= CLAW_SPEED;
+
+            if (gamepad1.a)
+                clawOffset2 += CLAW_SPEED;
+            else if (gamepad1.y)
+                clawOffset2 -= CLAW_SPEED;
+
+            if (gamepad1.x)
+                clawOffset3 += CLAW_SPEED;
+            else if (gamepad1.b)
+                clawOffset3 -= CLAW_SPEED;
+
+            if (gamepad1.dpad_up && !robot.slides.isBusy()){
+                robot.slide(1, 1000);
+>>>>>>> parent of a4f8d46... 2nd comp update
             }
 
             if (gamepad1.left_bumper) {
@@ -231,7 +295,22 @@ public class ExperimentalTeleOp extends LinearOpMode {
             clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
 
             //player 2 controls claw with A and B
+<<<<<<< HEAD
 
+=======
+            if(gamepad2.a){
+                robot.claw.setPosition(1);
+            }
+            if(gamepad2.b){
+                robot.claw.setPosition(0);
+            }
+            if(gamepad2.x){
+                robot.intakeSR.setPosition(1);
+            }
+            if(gamepad2.y){
+                robot.intakeSR.setPosition(0);
+            }
+>>>>>>> parent of a4f8d46... 2nd comp update
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Turn: " + newTurn + "        Strafe: " + newStrafe + "\n" +
