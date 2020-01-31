@@ -87,7 +87,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
         int counterDownLoosen = 0;
 
         //init servos
-        robot.pinion.setPower(0);
+        robot.autonArm.setPosition(0.5);
+        robot.autonClaw.setPosition(0.5);
+        robot.foundL.setPosition(0.5);
+        robot.foundR.setPosition(0.5);
+        robot.marker.setPosition(0.5);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
