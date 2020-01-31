@@ -92,10 +92,6 @@ public class ExperimentalTeleOp extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
         telemetry.update();
-
-        robot.foundL.setPosition(0.2);
-        robot.foundR.setPosition(0.2);
-
         waitForStart();
 
         // Start the logging of measured acceleration
@@ -105,18 +101,6 @@ public class ExperimentalTeleOp extends LinearOpMode {
         telemetry.update();
 
         while (opModeIsActive()) {
-            //speed is
-            //LS is fast, RS is half speed
-            if (gamepad1.left_stick_button) {
-                adjustedInput = false;
-                speed = 1;
-            }
-            if (gamepad1.right_stick_button) {
-                adjustedInput = true;
-                speed = 1;
-            }
-
-
 
             // Run wheels in POV mode (note: The joystick goes negative when pushed forwards, so negate it)
             // In this mode the Left stick moves the robot fwd and back, the Right stick turns left and right.
@@ -131,25 +115,25 @@ public class ExperimentalTeleOp extends LinearOpMode {
              */
 
             if (adjustedInput) {
-                if(drive>newDrive){
+                if (drive > newDrive) {
                     newDrive += 0.06;
-                } else if (drive<newDrive){
+                } else if (drive < newDrive) {
                     newDrive -= 0.06;
                 }
-                if(strafe>newStrafe){
+                if (strafe > newStrafe) {
                     newStrafe += 0.06;
-                } else if (strafe<newStrafe){
+                } else if (strafe < newStrafe) {
                     newStrafe -= 0.06;
                 }
-                if(turn>newTurn){
+                if (turn > newTurn) {
                     newTurn += 0.06;
-                } else if (turn<newTurn){
+                } else if (turn < newTurn) {
                     newTurn -= 0.06;
                 }
             } else {
-                drive=Math.pow(drive,3);
-                strafe=Math.pow(strafe,3);
-                turn=Math.pow(turn,3);
+                drive = Math.pow(drive, 3);
+                strafe = Math.pow(strafe, 3);
+                turn = Math.pow(turn, 3);
                 newDrive = drive;
                 newStrafe = strafe;
                 newTurn = turn;
@@ -188,36 +172,54 @@ public class ExperimentalTeleOp extends LinearOpMode {
             robot.motorRL.setPower(powerRL);
             robot.motorRR.setPower(powerRR);
 
-            //rear right motor test while buttons are held
-            while (gamepad1.a){
+            //gamepad 1 true/false controls below
+            if (gamepad1.left_stick_button) {
+                speed = 1;
+            }
+            if (gamepad1.right_stick_button) {
+                speed = 0.5;
+            }
+            while (gamepad1.a) {
                 robot.intakeL.setPower(0.9);
                 robot.intakeR.setPower(0.9);
             }
-            while(gamepad1.b) {
+            while (gamepad1.b) {
                 robot.intakeL.setPower(-0.9);
                 robot.intakeR.setPower(-0.9);
             }
-            while(gamepad1.x){
+            while (gamepad1.x) {
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
+            while (gamepad1.y) {
+                robot.intakeL.setPower(0);
+                robot.intakeR.setPower(0);
+            }
+            if (gamepad1.dpad_up) {
+                robot.pinion.setPower(1);
+                if (gamepad1.dpad_down) {
+                    robot.pinion.setPower(-1);
+                } else {
+                    robot.pinion.setPower(0);
+                }
+            }
+            while (gamepad1.dpad_left) {
+            }
+            while (gamepad1.dpad_right) {
+            }
+
+            if (gamepad1.left_bumper) {
+                robot.claw.setPosition(0);
+            }
+            if (gamepad1.right_bumper) {
+                robot.claw.setPosition(1);
+            }
 
             //left and right trigger values are used to calculate armSpeed
-            armSpeed= 1 *(gamepad2.right_trigger-gamepad2.left_trigger);
+            armSpeed = 1 * (gamepad2.right_trigger - gamepad2.left_trigger);
 
             //armSpeed is applied to motors
             robot.slides.setPower(armSpeed);
-
-            if (gamepad1.dpad_up && !robot.slides.isBusy()){
-                robot.slide(1, 1000);
-            }
-            if (gamepad1.dpad_down && !robot.slides.isBusy()){
-                robot.slide(1, -1000);
-
-            }
-
-            //player 2 controls the pinion using right stick
-            robot.pinion.setPower(gamepad2.right_stick_y);
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
@@ -225,37 +227,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
             clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
 
             //player 2 controls claw with A and B
-            if(gamepad2.a||gamepad1.a){
-                robot.claw.setPosition(0);
-            }
-            if(gamepad2.b||gamepad1.b){
-                robot.claw.setPosition(1);
-            }
-            if(gamepad2.x){
 
-            }
-            if(gamepad2.y){
 
-            }
-            if(gamepad2.dpad_up){
-                robot.marker.setPosition(0);
-            }
-            if(gamepad2.dpad_down){
-                robot.marker.setPosition(1);
-            }
-            if(gamepad1.x){
-                robot.foundL.setPosition(0);
-                robot.foundR.setPosition(0);
-            }
-            if(gamepad1.y){
-                robot.foundL.setPosition(1);
-                robot.foundR.setPosition(1);
-            }
             telemetry.addData("Status", "Speed: " + speed + "\n" +
-                    "Power: " + drive + "        Turn: " + turn + "        Strafe: " + strafe + "\n" +
-                    "Slide Power: " + "     intake Power: " + INTAKE_SPEED + "\n" +
-                    "Counter Up Tighten: " + counterUpTighten + "Counter Down Tighten: " + counterDownTighten + "\n"
-             + "Counter Up Loosen: " + counterUpLoosen + "Counter Down Loosen: " + counterDownLoosen);
+                    "Turn: " + newTurn + "        Strafe: " + newStrafe + "\n" +
+                    "Slide Power: " + armSpeed + "     intake Power: " + INTAKE_SPEED + "\n");
             telemetry.update();
         }
     }
