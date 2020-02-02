@@ -18,7 +18,6 @@ public class ExperimentalTeleOp extends LinearOpMode {
     BNO055IMU imu;
 
 
-
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
@@ -47,11 +46,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
 
         robot.init(hardwareMap);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -239,4 +238,5 @@ public class ExperimentalTeleOp extends LinearOpMode {
             telemetry.update();
         }
     }
+
 }
