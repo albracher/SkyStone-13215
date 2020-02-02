@@ -89,14 +89,7 @@ public class InternalCameraExample extends LinearOpMode
         while (opModeIsActive())
         {
             /*
-             * Send some stats to the telemetry
-             */
-            telemetry.addData("Frame Count", phoneCam.getFrameCount());
-            telemetry.addData("FPS", String.format("%.2f", phoneCam.getFps()));
-            telemetry.addData("Total frame time ms", phoneCam.getTotalFrameTimeMs());
-            telemetry.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
-            telemetry.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
-            telemetry.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
+             * Send some stats to the telem  eCam.getCurrentPipelineMaxFps());
             telemetry.update();
 
             /*

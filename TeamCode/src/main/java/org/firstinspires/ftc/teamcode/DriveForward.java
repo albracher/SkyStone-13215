@@ -58,6 +58,18 @@ public class DriveForward extends LinearOpMode {
 
         telemetry.addData("Status", "I've got a good lock! Firing!");
 
+        robot.motorFL.setPower(0.5);
+        robot.motorFR.setPower(0.5);
+        robot.motorRL.setPower(0.5);
+        robot.motorRR.setPower(0.5);
+        telemetry.addData("STATUS", "ALL MOTORS SET TO 0.5 POWER");
+        telemetry.update();
+        sleep(10000);
+        robot.motorFL.setPower(-0.5);
+        robot.motorFR.setPower(-0.5);
+        robot.motorRL.setPower(-0.5);
+        robot.motorRR.setPower(-0.5);
+        telemetry.addData("STATUS", "ALL MOTORS SET TO -0.5 POWER");
         telemetry.update();
 
     }
