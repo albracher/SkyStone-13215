@@ -127,7 +127,7 @@ public class BlueDepotFinals extends LinearOpMode {
         robot.autonClamp.setPosition(0.95);
         sleep(1000);
 
-       // telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
+        // telemetry.addData("vision sees: ",tfod.getUpdatedRecognitions());
 
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since

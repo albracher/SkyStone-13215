@@ -18,6 +18,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
     BNO055IMU imu;
 
 
+
     // State used for updating telemetry
     Orientation angles;
     Acceleration gravity;
@@ -46,11 +47,11 @@ public class ExperimentalTeleOp extends LinearOpMode {
 
         robot.init(hardwareMap);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
@@ -60,7 +61,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
         imu.initialize(parameters);
         //loads hardwareMap
 
-        boolean adjustedInput = false;
+        boolean adjustedInput = true;
         double drive;
         double turn;
         double strafe;
@@ -86,11 +87,7 @@ public class ExperimentalTeleOp extends LinearOpMode {
         int counterDownLoosen = 0;
 
         //init servos
-        robot.autonArm.setPosition(0.5);
-        robot.autonClaw.setPosition(0.5);
-        robot.foundL.setPosition(0.5);
-        robot.foundR.setPosition(0.5);
-        robot.marker.setPosition(0.5);
+        robot.pinion.setPower(0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
@@ -182,47 +179,78 @@ public class ExperimentalTeleOp extends LinearOpMode {
             if (gamepad1.right_stick_button) {
                 speed = 0.5;
             }
-            while (gamepad1.a) {
-                robot.intakeL.setPower(0.9);
-                robot.intakeR.setPower(0.9);
+            if (gamepad1.a) {
+                robot.intakeL.setPower(1.0);
+                robot.intakeR.setPower(1.0);
             }
-            while (gamepad1.b) {
-                robot.intakeL.setPower(-0.9);
-                robot.intakeR.setPower(-0.9);
+            if (gamepad1.b) {
+                robot.intakeL.setPower(-1.0);
+                robot.intakeR.setPower(-1.0);
             }
-            while (gamepad1.x) {
+            if (gamepad1.x) {
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
-            while (gamepad1.y) {
+            if (gamepad1.y) {
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
-            if (gamepad1.dpad_up) {
+            if (gamepad2.dpad_left) {
                 robot.pinion.setPower(1);
-                if (gamepad1.dpad_down) {
-                    robot.pinion.setPower(-1);
-                } else {
-                    robot.pinion.setPower(0);
-                }
             }
-            while (gamepad1.dpad_left) {
+            if (gamepad2.dpad_right) {
+                robot.pinion.setPower(-1);
             }
-            while (gamepad1.dpad_right) {
+            if(!gamepad2.dpad_up&&!gamepad2.dpad_down){
+                robot.pinion.setPower(0);
+            }
+            if (gamepad1.dpad_left) {
+                robot.marker.setPosition(0);
+            }
+            if (gamepad1.dpad_right) {
+                robot.marker.setPosition(1);
+
             }
 
-            if (gamepad1.left_bumper) {
-                robot.claw.setPosition(0);
+            if (gamepad2.left_bumper) {
+                robot.claw.setPosition(0.5);
             }
-            if (gamepad1.right_bumper) {
-                robot.claw.setPosition(1);
+            if (gamepad2.right_bumper) {
+                robot.claw.setPosition(0);
             }
 
             //left and right trigger values are used to calculate armSpeed
-            armSpeed = 1 * (gamepad2.right_trigger - gamepad2.left_trigger);
+            //armSpeed = 1 * (gamepad2.right_trigger - gamepad2.left_trigger);
+
+            //gamepad2 stuff here
+
+            if (gamepad2.dpad_down) {
+                robot.slides.setPower(0.9);
+
+            }
+            else if(gamepad2.dpad_up){
+                robot.slides.setPower(-0.9);
+            }
+            else{
+                robot.slides.setPower(0);
+            }
+            if (gamepad1.right_stick_button) {
+                speed = 0.5;
+            }
+            if (gamepad2.a) {
+                robot.foundR.setPosition(1);//foundation hooking code
+                robot.foundL.setPosition(1);
+
+            }
+            if (gamepad2.b) {
+                robot.foundR.setPosition(0.3);//foundation hooking code
+                robot.foundL.setPosition(0.3);
+
+            }
+
 
             //armSpeed is applied to motors
-            robot.slides.setPower(armSpeed);
+
 
             // Move both servos to new position.  Assume servos are mirror image of each other.
             clawOffset = Range.clip(clawOffset, -0.5, 0.5);
@@ -234,9 +262,9 @@ public class ExperimentalTeleOp extends LinearOpMode {
 
             telemetry.addData("Status", "Speed: " + speed + "\n" +
                     "Turn: " + newTurn + "        Strafe: " + newStrafe + "\n" +
-                    "Slide Power: " + armSpeed + "     intake Power: " + INTAKE_SPEED + "\n");
+                    "Slide Power: " + "     intake Power: " + INTAKE_SPEED + "\n");
             telemetry.update();
         }
     }
-
 }
+//idle();

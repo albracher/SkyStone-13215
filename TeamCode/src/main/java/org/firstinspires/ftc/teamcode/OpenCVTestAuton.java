@@ -43,15 +43,15 @@ public class OpenCVTestAuton extends LinearOpMode {
     private static int valLeft = -1;
     private static int valRight = -1;
 
-    private static float rectHeight = .6f / 8f;
-    private static float rectWidth = 1.5f / 8f;
+    private static float rectHeight = .6f/8f;
+    private static float rectWidth = 1.5f/8f;
 
-    private static float offsetX = 0f / 8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
-    private static float offsetY = 0f / 8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
+    private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
+    private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    private static float[] midPos = {4f / 8f + offsetX, 4f / 8f + offsetY};//0 = col, 1 = row
-    private static float[] leftPos = {2f / 8f + offsetX, 4f / 8f + offsetY};
-    private static float[] rightPos = {6f / 8f + offsetX, 4f / 8f + offsetY};
+    private static float[] midPos = {4f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
+    private static float[] leftPos = {2f/8f+offsetX, 4f/8f+offsetY};
+    private static float[] rightPos = {6f/8f+offsetX, 4f/8f+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
     private final int rows = 640;
@@ -64,6 +64,9 @@ public class OpenCVTestAuton extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+        telemetry.addData("STATUS", "INITIALIZED");
+        telemetry.update();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         phoneCam.openCameraDevice();//open camera
@@ -71,70 +74,109 @@ public class OpenCVTestAuton extends LinearOpMode {
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
+        int position = 0;
 
+
+        robot.autonClaw.setPosition(0);
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
 
-            //write actual auton in this loop
 
-            //drive towards scanning position
-            robot.initialApproach(1);
+            if (valLeft == 0) {
+                position = 3;
+            }
+            if (valMid == 0) {
+                position = 2;
+            }
+            if (valRight == 0) {
+                position = 1;
+            }
 
-            //extend claw
-            robot.autonExtend();
-
-            telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
+            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
+            telemetry.addData("Position", position);
 
             telemetry.update();
-            sleep(100);
-
-            //move based on camera readings
-
-            if (valLeft < 100) {
-
-            } else if (valRight < 100) {
-
+            sleep(500);
+            robot.strafe(1,2500);
+            telemetry.addData("STATUS", "APPROACH COMPLETED");
+            telemetry.update();
+            sleep(2000);
+            if(position == 1){
+                robot.drive(1,-200);
+            } else if(position == 2){
+                //be useless like nathan
+            } else if(position ==3) {
+                robot.drive(1, 200);
             }
+            telemetry.addData("STATUS", "CORRECTION COMPLETED");
+            telemetry.update();
+
+            sleep(2000);
+            robot.autonArm.setPosition(0);
+            telemetry.addData("STATUS", "ARM EXTENDED");
+            telemetry.update();
+            sleep(500);
+            robot.autonClaw.setPosition(1);
+            telemetry.addData("STATUS", "CLAW ACTIVATED");
+            telemetry.update();
+            sleep(500);
+            robot.autonArm.setPosition(0.1);
+            telemetry.addData("STATUS", "ARM RETRACTED");
+            telemetry.update();
+            robot.strafe(1, -2000);
+            robot.drive(1,5000);
+            robot.autonClaw.setPosition(0);
+
+//            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
+//            telemetry.addData("Height", rows);
+//            telemetry.addData("Width", cols);
+//
+//            telemetry.update();
+//            sleep(100);
+
+
 
             //call movement functions
 
             //approach stone
-            robot.approachStone(1);
-            //grab
-            robot.autonGrab();
-            //reverse behind bridge
-            robot.bridgeAlignment(1);
-            //move through the bridge
-            robot.cross(1);
-            //approach foundation
-            robot.approachStone(1);
-            //drops the block
-            robot.autonRelease();
-            sleep(1000);
-            //attach the arm to the foundation
-            robot.foundationGrab();
-            robot.bridgeAlignment(-1);
-            robot.initialApproach(-1);
-            robot.foundationRelease();
-            sleep(500);
+//            robot.approachStone(1);
+//            //grab
+//            robot.autonGrab();
+//            //reverse behind bridge
+//            robot.bridgeAlignment(1);
+//            //move through the bridge
+//            robot.cross(1);
+//            //approach foundation
+//            robot.approachStone(1);
+//            //drops the block
+//            robot.autonRelease();
+//            sleep(1000);
+//            //attach the arm to the foundation
+//            robot.foundationGrab();
+//            robot.bridgeAlignment(-1);
+//            robot.initialApproach(-1);
+//            robot.foundationRelease();
+//            sleep(500);
             //reset claw
-            robot.autonGrab();
-            //move under bridge
-            robot.park(1);
+//            robot.autonGrab();
+//            //move under bridge
+//            robot.park(1);
         }
     }
 
     //detection pipeline
-    static class StageSwitchingPipeline extends OpenCvPipeline {
+    static class StageSwitchingPipeline extends OpenCvPipeline
+    {
         Mat yCbCrChan2Mat = new Mat();
         Mat thresholdMat = new Mat();
         Mat all = new Mat();
         List<MatOfPoint> contoursList = new ArrayList<>();
 
-        enum Stage {//color difference. greyscale
+        enum Stage
+        {//color difference. greyscale
             detection,//includes outlines
             THRESHOLD,//b&w
             RAW_IMAGE,//displays raw view
@@ -144,7 +186,8 @@ public class OpenCVTestAuton extends LinearOpMode {
         private Stage[] stages = Stage.values();
 
         @Override
-        public void onViewportTapped() {
+        public void onViewportTapped()
+        {
             /*
              * Note that this method is invoked from the UI thread
              * so whatever we do here, we must do quickly.
@@ -154,7 +197,8 @@ public class OpenCVTestAuton extends LinearOpMode {
 
             int nextStageNum = currentStageNum + 1;
 
-            if (nextStageNum >= stages.length) {
+            if(nextStageNum >= stages.length)
+            {
                 nextStageNum = 0;
             }
 
@@ -162,7 +206,8 @@ public class OpenCVTestAuton extends LinearOpMode {
         }
 
         @Override
-        public Mat processFrame(Mat input) {
+        public Mat processFrame(Mat input)
+        {
             contoursList.clear();
             /*
              * This pipeline finds the contours of yellow blobs such as the Gold Mineral
@@ -186,67 +231,72 @@ public class OpenCVTestAuton extends LinearOpMode {
 
 
             //get values from frame
-            double[] pixMid = thresholdMat.get((int) (input.rows() * midPos[1]), (int) (input.cols() * midPos[0]));//gets value at circle
-            valMid = (int) pixMid[0];
+            double[] pixMid = thresholdMat.get((int)(input.rows()* midPos[1]), (int)(input.cols()* midPos[0]));//gets value at circle
+            valMid = (int)pixMid[0];
 
-            double[] pixLeft = thresholdMat.get((int) (input.rows() * leftPos[1]), (int) (input.cols() * leftPos[0]));//gets value at circle
-            valLeft = (int) pixLeft[0];
+            double[] pixLeft = thresholdMat.get((int)(input.rows()* leftPos[1]), (int)(input.cols()* leftPos[0]));//gets value at circle
+            valLeft = (int)pixLeft[0];
 
-            double[] pixRight = thresholdMat.get((int) (input.rows() * rightPos[1]), (int) (input.cols() * rightPos[0]));//gets value at circle
-            valRight = (int) pixRight[0];
+            double[] pixRight = thresholdMat.get((int)(input.rows()* rightPos[1]), (int)(input.cols()* rightPos[0]));//gets value at circle
+            valRight = (int)pixRight[0];
 
             //create three points
-            Point pointMid = new Point((int) (input.cols() * midPos[0]), (int) (input.rows() * midPos[1]));
-            Point pointLeft = new Point((int) (input.cols() * leftPos[0]), (int) (input.rows() * leftPos[1]));
-            Point pointRight = new Point((int) (input.cols() * rightPos[0]), (int) (input.rows() * rightPos[1]));
+            Point pointMid = new Point((int)(input.cols()* midPos[0]), (int)(input.rows()* midPos[1]));
+            Point pointLeft = new Point((int)(input.cols()* leftPos[0]), (int)(input.rows()* leftPos[1]));
+            Point pointRight = new Point((int)(input.cols()* rightPos[0]), (int)(input.rows()* rightPos[1]));
 
             //draw circles on those points
-            Imgproc.circle(all, pointMid, 5, new Scalar(255, 0, 0), 1);//draws circle
-            Imgproc.circle(all, pointLeft, 5, new Scalar(255, 0, 0), 1);//draws circle
-            Imgproc.circle(all, pointRight, 5, new Scalar(255, 0, 0), 1);//draws circle
+            Imgproc.circle(all, pointMid,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointLeft,5, new Scalar( 255, 0, 0 ),1 );//draws circle
+            Imgproc.circle(all, pointRight,5, new Scalar( 255, 0, 0 ),1 );//draws circle
 
             //draw 3 rectangles
             Imgproc.rectangle(//1-3
                     all,
                     new Point(
-                            input.cols() * (leftPos[0] - rectWidth / 2),
-                            input.rows() * (leftPos[1] - rectHeight / 2)),
+                            input.cols()*(leftPos[0]-rectWidth/2),
+                            input.rows()*(leftPos[1]-rectHeight/2)),
                     new Point(
-                            input.cols() * (leftPos[0] + rectWidth / 2),
-                            input.rows() * (leftPos[1] + rectHeight / 2)),
+                            input.cols()*(leftPos[0]+rectWidth/2),
+                            input.rows()*(leftPos[1]+rectHeight/2)),
                     new Scalar(0, 255, 0), 3);
             Imgproc.rectangle(//3-5
                     all,
                     new Point(
-                            input.cols() * (midPos[0] - rectWidth / 2),
-                            input.rows() * (midPos[1] - rectHeight / 2)),
+                            input.cols()*(midPos[0]-rectWidth/2),
+                            input.rows()*(midPos[1]-rectHeight/2)),
                     new Point(
-                            input.cols() * (midPos[0] + rectWidth / 2),
-                            input.rows() * (midPos[1] + rectHeight / 2)),
+                            input.cols()*(midPos[0]+rectWidth/2),
+                            input.rows()*(midPos[1]+rectHeight/2)),
                     new Scalar(0, 255, 0), 3);
             Imgproc.rectangle(//5-7
                     all,
                     new Point(
-                            input.cols() * (rightPos[0] - rectWidth / 2),
-                            input.rows() * (rightPos[1] - rectHeight / 2)),
+                            input.cols()*(rightPos[0]-rectWidth/2),
+                            input.rows()*(rightPos[1]-rectHeight/2)),
                     new Point(
-                            input.cols() * (rightPos[0] + rectWidth / 2),
-                            input.rows() * (rightPos[1] + rectHeight / 2)),
+                            input.cols()*(rightPos[0]+rectWidth/2),
+                            input.rows()*(rightPos[1]+rectHeight/2)),
                     new Scalar(0, 255, 0), 3);
 
-            switch (stageToRenderToViewport) {
-                case THRESHOLD: {
+            switch (stageToRenderToViewport)
+            {
+                case THRESHOLD:
+                {
                     return thresholdMat;
                 }
 
-                case detection: {
+                case detection:
+                {
                     return all;
                 }
 
-                default: {
+                default:
+                {
                     return input;
                 }
             }
         }
+
     }
 }
