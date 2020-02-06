@@ -194,6 +194,12 @@ public class FullMap {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
         }
+
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);
         motorFR.setPower(0);
@@ -245,6 +251,12 @@ public class FullMap {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
         }
+
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);
         motorFR.setPower(0);

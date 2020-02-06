@@ -15,7 +15,7 @@ import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 
 public class BuildingSide extends LinearOpMode {
 
-    ExperimentalAutonMap robot = new ExperimentalAutonMap();
+    FullMap robot = new FullMap();
 
 /*
     private GoldAlignDetector detector;
@@ -48,16 +48,6 @@ public class BuildingSide extends LinearOpMode {
 
         //move forward to foundation
         robot.drive(DRIVE_SPEED, 2100);
-        //attach the arm to the foundation
-        robot.foundL.setPosition(1);
-        robot.foundR.setPosition(1);
-        //pull back foundation
-        robot.drive(0.5, -2350);
-        //let go
-        robot.foundL.setPosition(0);
-        robot.foundR.setPosition(0);
-        //move under bridge
-        robot.strafe(0.5,3550);
 
 
         telemetry.addData("Status", "I've got a good lock! Firing!");

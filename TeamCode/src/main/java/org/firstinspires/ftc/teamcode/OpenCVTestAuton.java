@@ -76,12 +76,9 @@ public class OpenCVTestAuton extends LinearOpMode {
         //width = height in this case, because camera is in portrait mode.
         int position = 0;
 
-
-        robot.autonClaw.setPosition(0);
         waitForStart();
         runtime.reset();
-        while (opModeIsActive()) {
-
+        if(opModeIsActive()) {
 
             if (valLeft == 0) {
                 position = 3;
@@ -99,22 +96,36 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("Position", position);
 
             telemetry.update();
-            sleep(500);
-            robot.strafe(1,2500);
-            telemetry.addData("STATUS", "APPROACH COMPLETED");
+            sleep(500); //meant so that robot doesn't immediately move when pressing play
+            robot.drive(1,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
-            sleep(2000);
-            if(position == 1){
-                robot.drive(1,-200);
-            } else if(position == 2){
-                //be useless like nathan
-            } else if(position ==3) {
-                robot.drive(1, 200);
+            sleep(5000); // we have 5 seconds to read telemetry before the robot decides what it wants to do
+
+            if (position == 3) {
+                robot.drive(1, 400);
+            } else if (position == 1) {
+                robot.drive(1, -400);
+            } else {
+                //be n810
             }
+
+         //this is here for allen's reference
+         /*   if(position == 1){
+                robot.drive(1,-400);
+            }
+            if(position == 2){
+                //be useless like nathan
+            }
+            if(position ==3) {
+                robot.drive(1, 400);
+            }*/
+
+
             telemetry.addData("STATUS", "CORRECTION COMPLETED");
             telemetry.update();
 
-            sleep(2000);
+            /*sleep(2000);
             robot.autonArm.setPosition(0);
             telemetry.addData("STATUS", "ARM EXTENDED");
             telemetry.update();
@@ -125,10 +136,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             sleep(500);
             robot.autonArm.setPosition(0.1);
             telemetry.addData("STATUS", "ARM RETRACTED");
-            telemetry.update();
-            robot.strafe(1, -2000);
-            robot.drive(1,5000);
-            robot.autonClaw.setPosition(0);
+            telemetry.update();*/
 
 //            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
 //            telemetry.addData("Height", rows);
