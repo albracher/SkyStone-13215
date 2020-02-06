@@ -160,22 +160,14 @@ public class FullMap {
         motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-       /* //get start heading and init variables
-        double startHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-        double currentHeading;
-        double difference;*/
 
         // Declares target point storage variables
-        int targetFL;
-        int initialFL;
-        double completion;
-        int targetFR;
-        int targetRL;
-        int targetRR;
+        int targetFL=0;
+        int targetFR=0;
+        int targetRL=0;
+        int targetRR=0;
         // Determines new target position, and pass to motor controller
         targetFL = motorFL.getCurrentPosition() + distance;
-        //grab this for movement smoothing
-        initialFL = motorFL.getCurrentPosition();
         targetFR = motorFR.getCurrentPosition() + distance;
         targetRL = motorRL.getCurrentPosition() + distance;
         targetRR = motorRR.getCurrentPosition() + distance;
@@ -192,38 +184,23 @@ public class FullMap {
 
         // Motors are set to run at a certain speed until one reaches its target position
         while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
-
-            //let's do fancy math to smooth movement!
-            //first, we need to figure out how close we are to getting to our target
-            //i'm going to be using the front left motor to calculate this
-            completion = (motorFL.getCurrentPosition()-initialFL)/(targetFL-initialFL);
-            completion = (-4*Math.pow((completion-0.5),2)+1.25);
-            completion = Range.clip(completion, 0, 1);
-            completion *= speed;
-
-            motorFL.setPower(Math.abs(completion));
-            motorFR.setPower(Math.abs(completion));
-            motorRL.setPower(Math.abs(completion));
-            motorRR.setPower(Math.abs(completion));
+            motorFL.setPower(Math.abs(speed));
+            motorFR.setPower(Math.abs(speed));
+            motorRL.setPower(Math.abs(speed));
+            motorRR.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
-
-
-            //get current heading
-           /* currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-            difference = startHeading - currentHeading;*/
-
-            //rotate(0.5, difference);
         }
-        // The motors are shutdown when a motor gets to its target position
-        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);
         motorFR.setPower(0);
         motorRL.setPower(0);
@@ -232,6 +209,8 @@ public class FullMap {
         targetFR=0;
         targetRL=0;
         targetRR=0;
+        speed=0;
+        distance=0;
     }
 
     public void strafe(double speed, int distance) {
@@ -242,16 +221,12 @@ public class FullMap {
         motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Declares target point storage variables
-        int targetFL;
-        int initialFL;
-        double completion;
-        int targetFR;
-        int targetRL;
-        int targetRR;
+        int targetFL=0;
+        int targetFR=0;
+        int targetRL=0;
+        int targetRR=0;
         // Determines new target position, and pass to motor controller
         targetFL = motorFL.getCurrentPosition() + distance;
-        //grab this for movement smoothing
-        initialFL = motorFL.getCurrentPosition();
         targetFR = motorFR.getCurrentPosition() - distance;
         targetRL = motorRL.getCurrentPosition() - distance;
         targetRR = motorRR.getCurrentPosition() + distance;
@@ -268,37 +243,21 @@ public class FullMap {
 
         // Motors are set to run at a certain speed until one reaches its target position
         while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
-
-            //let's do fancy math to smooth movement!
-            //first, we need to figure out how close we are to getting to our target
-            //i'm going to be using the front left motor to calculate this
-            completion = (motorFL.getCurrentPosition()-initialFL)/(targetFL-initialFL);
-            completion = (-4*Math.pow((completion-0.5),2)+1.25);
-            completion = Range.clip(completion, 0, 1);
-            completion *= speed;
-
-            motorFL.setPower(Math.abs(completion));
-            motorFR.setPower(Math.abs(completion));
-            motorRL.setPower(Math.abs(completion));
-            motorRR.setPower(Math.abs(completion));
+            motorFL.setPower(Math.abs(speed));
+            motorFR.setPower(Math.abs(speed));
+            motorRL.setPower(Math.abs(speed));
+            motorRR.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
-
-
-            //get current heading
-           /* currentHeading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-            difference = startHeading - currentHeading;*/
-
-            //rotate(0.5, difference);
         }
 
-        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // The motors are shutdown when a motor gets to its target position
         motorFL.setPower(0);
@@ -310,6 +269,8 @@ public class FullMap {
         targetFR=0;
         targetRL=0;
         targetRR=0;
+        speed=0;
+        distance=0;
     }
 
 
