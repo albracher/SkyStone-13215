@@ -79,6 +79,8 @@ public class OpenCVTestAuton extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
+        robot.autonArm.setPosition(0.05);
+
         while(!opModeIsActive()){
             if (valLeft == 0) {
                 position = 3;
@@ -96,6 +98,11 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("Position", position);
 
             telemetry.update();
+
+            sleep(3000);
+
+
+
         }
 
         waitForStart();
@@ -108,7 +115,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             phoneCam.closeCameraDevice();
 
             sleep(500); //meant so that robot doesn't immediately move when pressing play
-            robot.strafe(DRIVE_SPEED,2460); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(DRIVE_SPEED,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
             sleep(1500); // we have 5 seconds to read telemetry before the robot decides what it wants to do
@@ -116,7 +123,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             if (position == 3) {
                 //movement not required
             } else if (position == 1) {
-                robot.drive(DRIVE_SPEED, 600);
+                robot.drive(DRIVE_SPEED, 800);
             } else {
                 robot.drive(DRIVE_SPEED, 300);
             }
@@ -124,14 +131,23 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("STATUS", "CORRECTION COMPLETED");
             telemetry.update();
 
-//            sleep(2000);
-//
-//            robot.autonClaw.setPosition(0);
-//            sleep(2000);
-//            robot.autonClaw.setPosition(1);
-//
-//            telemetry.addData("STATUS", "GRAB COMPLETED");
-//            telemetry.update();
+            robot.autonClaw.setPosition(0);
+            sleep(1500);
+
+            robot.autonArm.setPosition(0.3);
+
+            sleep(1500);
+
+            robot.autonClaw.setPosition(0.3);
+
+            sleep(1500);
+
+            robot.autonArm.setPosition(0.05);
+
+            sleep(1500);
+
+            telemetry.addData("STATUS", "GRAB COMPLETED");
+            telemetry.update();
 //
 //            sleep(2000);
 //
@@ -147,67 +163,6 @@ public class OpenCVTestAuton extends LinearOpMode {
 //            telemetry.addData("STATUS", "CROSSING COMPLETED");
 //            telemetry.update();
 
-         //this is here for allen's reference
-         /*   if(position == 1){
-                robot.drive(1,-400);
-            }
-            if(position == 2){
-                //be useless like nathan
-            }
-            if(position ==3) {
-                robot.drive(1, 400);
-            }*/
-
-
-
-
-            /*sleep(2000);
-            robot.autonArm.setPosition(0);
-            telemetry.addData("STATUS", "ARM EXTENDED");
-            telemetry.update();
-            sleep(500);
-            robot.autonClaw.setPosition(1);
-            telemetry.addData("STATUS", "CLAW ACTIVATED");
-            telemetry.update();
-            sleep(500);
-            robot.autonArm.setPosition(0.1);
-            telemetry.addData("STATUS", "ARM RETRACTED");
-            telemetry.update();*/
-
-//            telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
-//            telemetry.addData("Height", rows);
-//            telemetry.addData("Width", cols);
-//
-//            telemetry.update();
-//            sleep(100);
-
-
-
-            //call movement functions
-
-            //approach stone
-//            robot.approachStone(1);
-//            //grab
-//            robot.autonGrab();
-//            //reverse behind bridge
-//            robot.bridgeAlignment(1);
-//            //move through the bridge
-//            robot.cross(1);
-//            //approach foundation
-//            robot.approachStone(1);
-//            //drops the block
-//            robot.autonRelease();
-//            sleep(1000);
-//            //attach the arm to the foundation
-//            robot.foundationGrab();
-//            robot.bridgeAlignment(-1);
-//            robot.initialApproach(-1);
-//            robot.foundationRelease();
-//            sleep(500);
-            //reset claw
-//            robot.autonGrab();
-//            //move under bridge
-//            robot.park(1);
         }
     }
 

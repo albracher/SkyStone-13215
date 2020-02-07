@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.*;
 
@@ -48,10 +50,20 @@ public class FullMap {
     public static final double DRIVE_SPEED = 0.5;
     //counts per inch: 189.072002609
 
+    private ElapsedTime runtime = new ElapsedTime();
+    private Telemetry telemetry;
+    private Orientation angles;
+
+    private BNO055IMU imu;
+    private BNO055IMU.Parameters gyroParameters;
+
+    private double heading;
+    private double lastangle = 0;
+    private boolean ccwRotation = false;
+
     /* local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
-    private Telemetry telemetry;
 
     /* Constructor */
     public FullMap() {
@@ -61,6 +73,15 @@ public class FullMap {
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
 
         // Define and Initialize Motors
         motorFL = hwMap.get(DcMotor.class, "fl");
@@ -271,6 +292,65 @@ public class FullMap {
         targetRR=0;
         speed=0;
         distance=0;
+    }
+
+    public void rotate(String direction, double speed, double angle) {
+
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
+        heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+        heading = Math.floor(heading);
+        heading = Range.clip(heading, -180.0, 180.0);
+
+        //boolean beforeAngle = (direction.equals("cw") ? heading > angle | heading<angle);
+
+        if (direction.equals("cw") || direction.equals("clockwise")) {
+            while (Math.abs(heading) > angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
+
+            }
+        } else if (direction.equals("counterclockwise") || direction.equals("ccw")) {
+            while (heading < angle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                motorFR.setPower(speed);
+                motorFL.setPower(-speed);
+                motorRR.setPower(speed);
+                motorRL.setPower(-speed);
+            }
+        }
+
+        lastangle = heading;
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorRR.setPower(0);
+        motorRL.setPower(0);
     }
 
 
