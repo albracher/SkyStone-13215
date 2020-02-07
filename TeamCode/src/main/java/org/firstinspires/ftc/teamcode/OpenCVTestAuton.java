@@ -57,12 +57,16 @@ public class OpenCVTestAuton extends LinearOpMode {
     private final int rows = 640;
     private final int cols = 480;
 
+    private final double DRIVE_SPEED = 0.5;
+
     OpenCvCamera phoneCam;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         robot.init(hardwareMap);
+
+        int position = 0;
 
         telemetry.addData("STATUS", "INITIALIZED");
         telemetry.update();
@@ -74,23 +78,17 @@ public class OpenCVTestAuton extends LinearOpMode {
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);//display on RC
         //width, height
         //width = height in this case, because camera is in portrait mode.
-        int position = 0;
-        if (valLeft == 0) {
-            position = 3;
-        }
-        if (valMid == 0) {
-            position = 2;
-        }
-        if (valRight == 0) {
-            position = 1;
-        }
 
-        robot.autonClaw.setPosition(0);
-        sleep(3000);
-        robot.autonClaw.setPosition(1);
-        waitForStart();
-        runtime.reset();
-        if(opModeIsActive()) {
+        while(!opModeIsActive()){
+            if (valLeft == 0) {
+                position = 3;
+            }
+            if (valMid == 0) {
+                position = 2;
+            }
+            if (valRight == 0) {
+                position = 1;
+            }
 
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
@@ -98,19 +96,56 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("Position", position);
 
             telemetry.update();
+        }
+
+        waitForStart();
+        runtime.reset();
+        if(opModeIsActive()) {
+
+
+
+
+            phoneCam.closeCameraDevice();
+
             sleep(500); //meant so that robot doesn't immediately move when pressing play
-            robot.strafe(1,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(DRIVE_SPEED,2460); //robot alignment is rotated, so "strafe" really just means drive towards blocks
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
-            sleep(5000); // we have 5 seconds to read telemetry before the robot decides what it wants to do
+            sleep(1500); // we have 5 seconds to read telemetry before the robot decides what it wants to do
 
             if (position == 3) {
-                robot.drive(1, -400);
+                //movement not required
             } else if (position == 1) {
-                robot.drive(1, 400);
+                robot.drive(DRIVE_SPEED, 600);
             } else {
-                //be n810
+                robot.drive(DRIVE_SPEED, 300);
             }
+
+            telemetry.addData("STATUS", "CORRECTION COMPLETED");
+            telemetry.update();
+
+//            sleep(2000);
+//
+//            robot.autonClaw.setPosition(0);
+//            sleep(2000);
+//            robot.autonClaw.setPosition(1);
+//
+//            telemetry.addData("STATUS", "GRAB COMPLETED");
+//            telemetry.update();
+//
+//            sleep(2000);
+//
+//            robot.strafe(DRIVE_SPEED, -2500);
+//
+//            telemetry.addData("STATUS", "REVERSE COMPLETED");
+//            telemetry.update();
+//
+//            sleep(2000);
+//
+//            robot.drive(DRIVE_SPEED, -5000);
+//
+//            telemetry.addData("STATUS", "CROSSING COMPLETED");
+//            telemetry.update();
 
          //this is here for allen's reference
          /*   if(position == 1){
@@ -124,8 +159,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             }*/
 
 
-            telemetry.addData("STATUS", "CORRECTION COMPLETED");
-            telemetry.update();
+
 
             /*sleep(2000);
             robot.autonArm.setPosition(0);
