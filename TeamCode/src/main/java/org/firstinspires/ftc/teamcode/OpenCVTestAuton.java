@@ -75,21 +75,22 @@ public class OpenCVTestAuton extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
         int position = 0;
+        if (valLeft == 0) {
+            position = 3;
+        }
+        if (valMid == 0) {
+            position = 2;
+        }
+        if (valRight == 0) {
+            position = 1;
+        }
+
+        robot.autonClaw.setPosition(0);
+        sleep(3000);
+        robot.autonClaw.setPosition(1);
         waitForStart();
         runtime.reset();
         if(opModeIsActive()) {
-
-
-
-            if (valLeft == 0) {
-                position = 3;
-            }
-            if (valMid == 0) {
-                position = 2;
-            }
-            if (valRight == 0) {
-                position = 1;
-            }
 
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);

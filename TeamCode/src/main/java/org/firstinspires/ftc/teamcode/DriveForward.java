@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Drive Forward 6 inches", group="autonomous")
+@Autonomous(name="Drive Forward", group="autonomous")
 
 /* Declare OpMode members. */
 
 public class DriveForward extends LinearOpMode {
 
-    AutonMap robot = new AutonMap();
+    FullMap robot = new FullMap();
 
 /*
     private GoldAlignDetector detector;
@@ -22,7 +22,7 @@ public class DriveForward extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    public static double DRIVE_SPEED = 0.5;
+    public static double DRIVE_SPEED = 1;
 
     @Override
 
@@ -43,34 +43,25 @@ public class DriveForward extends LinearOpMode {
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
 
+        robot.foundL.setPosition(0.5);
+        robot.foundR.setPosition(0.5);
+
         waitForStart();
 
 
         //move forward to foundation
-        sleep(20000);
-        robot.drive(DRIVE_SPEED, -3000);
+        sleep(2000);
+        robot.strafe(DRIVE_SPEED, 2500);
 
         sleep(250);
 
         //clear claw for TeleOp
-        robot.autonClaw.setPosition(0.7);
 
+        robot.foundL.setPosition(0.95);
+        robot.foundR.setPosition(0.95);
+        sleep(2000);
 
-        telemetry.addData("Status", "I've got a good lock! Firing!");
-
-        robot.motorFL.setPower(0.5);
-        robot.motorFR.setPower(0.5);
-        robot.motorRL.setPower(0.5);
-        robot.motorRR.setPower(0.5);
-        telemetry.addData("STATUS", "ALL MOTORS SET TO 0.5 POWER");
-        telemetry.update();
-        sleep(10000);
-        robot.motorFL.setPower(-0.5);
-        robot.motorFR.setPower(-0.5);
-        robot.motorRL.setPower(-0.5);
-        robot.motorRR.setPower(-0.5);
-        telemetry.addData("STATUS", "ALL MOTORS SET TO -0.5 POWER");
-        telemetry.update();
+        robot.strafe(DRIVE_SPEED, -2500);
 
     }
 }

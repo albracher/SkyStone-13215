@@ -275,6 +275,7 @@ public class FullMap {
 
 
     public void autonExtend(){
+
         autonArm.setPosition(0);
     }
 
