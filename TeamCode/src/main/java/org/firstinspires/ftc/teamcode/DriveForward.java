@@ -22,6 +22,7 @@ public class DriveForward extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
+    //Set DriveSpeed to 1 to be faster
     public static double DRIVE_SPEED = 1;
 
     @Override
@@ -43,6 +44,7 @@ public class DriveForward extends LinearOpMode {
         telemetry.addData("Status", "Ready to run Test Autonomous");
         telemetry.update();
 
+        //"foundL and foundR" is for the foundation
         robot.foundL.setPosition(0.5);
         robot.foundR.setPosition(0.5);
 
@@ -50,13 +52,15 @@ public class DriveForward extends LinearOpMode {
 
 
         //move forward to foundation
+        //sleep for 20 seconds
         sleep(2000);
+        //set distance from -3000 to 2500 because stuff flipped
         robot.strafe(DRIVE_SPEED, 2500);
 
         sleep(250);
 
         //clear claw for TeleOp
-
+        //push two foundation claws up
         robot.foundL.setPosition(0.95);
         robot.foundR.setPosition(0.95);
         sleep(2000);

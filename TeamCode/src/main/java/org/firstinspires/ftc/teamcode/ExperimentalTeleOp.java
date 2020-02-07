@@ -212,8 +212,12 @@ public class ExperimentalTeleOp extends LinearOpMode {
 
             }
 
+            //rev servo 180 degrees of motion
+            //gobilda servo 300 degrees of motion
+            //therefore, old setPosition set to 0.5 which means 90 deg.,
+            //new setPosition to 90 deg, means setPosition 0.3
             if (gamepad2.left_bumper) {
-                robot.claw.setPosition(0.5);
+                robot.claw.setPosition(0.3);
             }
             if (gamepad2.right_bumper) {
                 robot.claw.setPosition(0);
