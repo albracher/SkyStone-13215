@@ -411,4 +411,22 @@ public class FullMap {
         foundR.setPosition(0);
     }
 
+        public void timeRotate(double speed, double time) {
+            motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            runtime.reset();
+            while (runtime.seconds() < time) {
+                motorFL.setPower(speed);
+                motorRL.setPower(speed);
+                motorFR.setPower(-speed);
+                motorRR.setPower(-speed);
+            }
+            motorFL.setPower(0);
+            motorRL.setPower(0);
+            motorFR.setPower(0);
+            motorRR.setPower(0);
+        }
+
 }

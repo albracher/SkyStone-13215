@@ -99,7 +99,7 @@ public class OpenCVTestAuton extends LinearOpMode {
 
             telemetry.update();
 
-            sleep(3000);
+            sleep(1000);
 
 
 
@@ -113,19 +113,19 @@ public class OpenCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-
-            sleep(500); //meant so that robot doesn't immediately move when pressing play
-            robot.strafe(DRIVE_SPEED,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(DRIVE_SPEED,2700); //robot alignment is rotated, so "strafe" really just means drive towards blocks
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
-            sleep(1500); // we have 5 seconds to read telemetry before the robot decides what it wants to do
+            sleep(1000); // we have 5 seconds to read telemetry before the robot decides what it wants to do
 
+            robot.timeRotate(-0.25, 1);
+            sleep(1000);
             if (position == 3) {
                 //movement not required
             } else if (position == 1) {
-                robot.drive(DRIVE_SPEED, 800);
+                robot.drive(DRIVE_SPEED, 900);
             } else {
-                robot.drive(DRIVE_SPEED, 300);
+                robot.drive(DRIVE_SPEED, 400);
             }
 
             telemetry.addData("STATUS", "CORRECTION COMPLETED");
@@ -138,7 +138,7 @@ public class OpenCVTestAuton extends LinearOpMode {
 
             sleep(1500);
 
-            robot.autonClaw.setPosition(0.3);
+            robot.autonClaw.setPosition(0.5);
 
             sleep(1500);
 
