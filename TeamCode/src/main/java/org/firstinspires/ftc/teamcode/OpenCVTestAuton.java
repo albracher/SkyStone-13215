@@ -113,12 +113,13 @@ public class OpenCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-            robot.strafe(DRIVE_SPEED,2700); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(DRIVE_SPEED,3400); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
             sleep(1000); // we have 5 seconds to read telemetry before the robot decides what it wants to do
 
-            robot.timeRotate(-0.25, 1);
+            //robot.timeRotate(-0.25, 1);
             sleep(1000);
             if (position == 3) {
                 //movement not required
