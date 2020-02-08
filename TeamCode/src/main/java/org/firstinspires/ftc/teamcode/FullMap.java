@@ -58,6 +58,7 @@ public class FullMap {
     private BNO055IMU.Parameters gyroParameters;
 
     private double heading;
+    private double error;
     private double lastangle = 0;
     private boolean ccwRotation = false;
 
@@ -428,5 +429,76 @@ public class FullMap {
             motorFR.setPower(0);
             motorRR.setPower(0);
         }
+
+    public void strafe(double speed, int distance, double angle) {
+        // Resets encoder values so that it doesn't attempt to run to outdated values
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
+        // Declares target point storage variables
+        int targetFL=0;
+        int targetFR=0;
+        int targetRL=0;
+        int targetRR=0;
+        // Determines new target position, and pass to motor controller
+        targetFL = motorFL.getCurrentPosition() + distance;
+        targetFR = motorFR.getCurrentPosition() - distance;
+        targetRL = motorRL.getCurrentPosition() - distance;
+        targetRR = motorRR.getCurrentPosition() + distance;
+        motorFL.setTargetPosition(targetFL);
+        motorFR.setTargetPosition(targetFR);
+        motorRL.setTargetPosition(targetRL);
+        motorRR.setTargetPosition(targetRR);
+
+        // Sets motors to run to a given encoder value
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        // Motors are set to run at a certain speed until one reaches its target position
+        while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES);
+
+            heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+            heading = Math.floor(heading);
+            heading = Range.clip(heading, -180.0, 180.0);
+            error = (angle - heading)*0.1;
+            motorFL.setPower(Math.abs(speed)+error);
+            motorFR.setPower(Math.abs(speed)+error);
+            motorRL.setPower(Math.abs(speed)-error);
+            motorRR.setPower(Math.abs(speed)-error);
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+        }
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorRR.setPower(0);
+        motorRL.setPower(0);
+
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // The motors are shutdown when a motor gets to its target position
+
+
+        targetFL=0;
+        targetFR=0;
+        targetRL=0;
+        targetRR=0;
+        speed=0;
+        distance=0;
+    }
 
 }
