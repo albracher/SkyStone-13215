@@ -81,6 +81,10 @@ public class OpenCVTestAuton extends LinearOpMode {
 
         robot.autonArm.setPosition(0.05);
 
+        //"foundL and foundR" is for the foundation
+        robot.foundL.setPosition(0.5);
+        robot.foundR.setPosition(0.5);
+
         while(!opModeIsActive()){
             if (valLeft == 0) {
                 position = 3;
@@ -124,7 +128,7 @@ public class OpenCVTestAuton extends LinearOpMode {
             if (position == 3) {
                 //movement not required
             } else if (position == 1) {
-                robot.drive(DRIVE_SPEED, 900);
+                robot.drive(DRIVE_SPEED, 869);
             } else {
                 robot.drive(DRIVE_SPEED, 400);
             }
@@ -133,36 +137,49 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.update();
 
             robot.autonClaw.setPosition(0);
-            sleep(1500);
+            sleep(1000);
 
             robot.autonArm.setPosition(0.3);
 
-            sleep(1500);
+            sleep(1000);
 
-            robot.autonClaw.setPosition(0.5);
+            robot.autonClaw.setPosition(0.7);
 
-            sleep(1500);
+            sleep(1000);
 
             robot.autonArm.setPosition(0.05);
 
-            sleep(1500);
+            sleep(1000);
 
             telemetry.addData("STATUS", "GRAB COMPLETED");
             telemetry.update();
-//
-//            sleep(2000);
-//
-//            robot.strafe(DRIVE_SPEED, -2500);
-//
-//            telemetry.addData("STATUS", "REVERSE COMPLETED");
-//            telemetry.update();
-//
-//            sleep(2000);
-//
-//            robot.drive(DRIVE_SPEED, -5000);
-//
-//            telemetry.addData("STATUS", "CROSSING COMPLETED");
-//            telemetry.update();
+
+            robot.strafe(DRIVE_SPEED, -1500);
+
+            telemetry.addData("STATUS", "REVERSE COMPLETED");
+            telemetry.update();
+
+            sleep(2000);
+
+            robot.drive(DRIVE_SPEED, 5500);
+
+            telemetry.addData("STATUS", "CROSSING COMPLETED");
+            telemetry.update();
+
+            robot.strafe(DRIVE_SPEED, 1500);
+
+            telemetry.addData("STATUS", "RETURN COMPLETED");
+            telemetry.update();
+
+            sleep(2000);
+
+            //push two foundation claws up
+            robot.autonClaw.setPosition(0);
+            robot.foundL.setPosition(0.95);
+            robot.foundR.setPosition(0.95);
+            sleep(2000);
+
+            robot.strafe(DRIVE_SPEED,-3400);
 
         }
     }

@@ -86,12 +86,14 @@ public class TestCode extends LinearOpMode {
         robot.motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        robot.motorFL.setPower(Math.abs(speed));
+        robot.motorFR.setPower(Math.abs(speed));
+        robot.motorRL.setPower(Math.abs(speed));
+        robot.motorRR.setPower(Math.abs(speed));
+
         // Motors are set to run at a certain speed until one reaches its target position
         while (robot.motorFL.isBusy() || robot.motorFR.isBusy() || robot.motorRL.isBusy() || robot.motorRR.isBusy()) {
-            robot.motorFL.setPower(Math.abs(speed));
-            robot.motorFR.setPower(Math.abs(speed));
-            robot.motorRL.setPower(Math.abs(speed));
-            robot.motorRR.setPower(Math.abs(speed));
+
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
@@ -103,16 +105,18 @@ public class TestCode extends LinearOpMode {
             telemetry.update();
         }
 
-        robot.motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         // The motors are shutdown when a motor gets to its target position
         robot.motorFL.setPower(0);
         robot.motorFR.setPower(0);
         robot.motorRL.setPower(0);
         robot.motorRR.setPower(0);
+
+        robot.motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
         targetFL=0;
         targetFR=0;
         targetRL=0;
