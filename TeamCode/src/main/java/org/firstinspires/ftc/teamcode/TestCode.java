@@ -15,7 +15,6 @@ import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 public class TestCode extends LinearOpMode {
 
     FullMap robot = new FullMap();
-
 /*
     private GoldAlignDetector detector;
 */
@@ -51,7 +50,7 @@ public class TestCode extends LinearOpMode {
         //sleep for 20 seconds
         sleep(2000);
         //set distance from -3000 to 2500 because st  uff flipped
-        drive(DRIVE_SPEED, 2500);
+        drive(0.5,1500);
 
         sleep(250);
 

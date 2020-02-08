@@ -154,12 +154,12 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("STATUS", "GRAB COMPLETED");
             telemetry.update();
 
-            robot.strafe(DRIVE_SPEED, -1500);
+            robot.strafe(DRIVE_SPEED, -1400);
 
             telemetry.addData("STATUS", "REVERSE COMPLETED");
             telemetry.update();
 
-            sleep(2000);
+            sleep(1000);
 
             robot.drive(DRIVE_SPEED, 5500);
 
@@ -171,15 +171,15 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("STATUS", "RETURN COMPLETED");
             telemetry.update();
 
-            sleep(2000);
+            sleep(1000);
 
             //push two foundation claws up
             robot.autonClaw.setPosition(0);
             robot.foundL.setPosition(0.95);
             robot.foundR.setPosition(0.95);
-            sleep(2000);
+            sleep(1000);
 
-            robot.strafe(DRIVE_SPEED,-3400);
+            robot.strafe(DRIVE_SPEED,-3025);
 
         }
     }
