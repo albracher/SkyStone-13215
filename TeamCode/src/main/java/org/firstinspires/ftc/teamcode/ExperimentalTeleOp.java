@@ -88,7 +88,8 @@ public class ExperimentalTeleOp extends LinearOpMode {
         int counterDownLoosen = 0;
 
         //init servos
-        robot.pinion.setPower(0);
+        robot.autonArm.setPosition(0);
+        robot.autonClaw.setPosition(0.7);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Robot is waiting.");
@@ -217,10 +218,10 @@ public class ExperimentalTeleOp extends LinearOpMode {
             //gobilda servo 300 degrees of motion
             //therefore, old setPosition set to 0.5 which means 90 deg.,
             //new setPosition to 90 deg, means setPosition 0.3
-            if (gamepad2.left_bumper) {
+            if (gamepad2.x) {
                 robot.claw.setPosition(0.3);
             }
-            if (gamepad2.right_bumper) {
+            if (gamepad2.y) {
                 robot.claw.setPosition(0);
             }
 
@@ -243,13 +244,13 @@ public class ExperimentalTeleOp extends LinearOpMode {
                 speed = 0.5;
             }
             if (gamepad2.a) {
-                robot.foundR.setPosition(1);//foundation hooking code
-                robot.foundL.setPosition(1);
+                robot.foundR.setPosition(0.95);//foundation hooking code
+                robot.foundL.setPosition(0.95);
 
             }
             if (gamepad2.b) {
-                robot.foundR.setPosition(0.3);//foundation hooking code
-                robot.foundL.setPosition(0.3);
+                robot.foundR.setPosition(0.4);//foundation hooking code
+                robot.foundL.setPosition(0.4);
 
             }
 
