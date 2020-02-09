@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.os.PowerManager;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -261,16 +264,24 @@ public class FullMap {
 
         // Sets motors to run to a given encoder value
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorFL.setPower(Math.abs(speed));
-        motorFR.setPower(Math.abs(speed));
-        motorRL.setPower(Math.abs(speed));
-        motorRR.setPower(Math.abs(speed));
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorRL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        double fetchedSpeed = 0;
+
+        motorFL.setPower(Math.abs(speed));
         // Motors are set to run at a certain speed until one reaches its target position
-        while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
+        while (motorFL.isBusy()) {
+            if(distance>0) {
+                fetchedSpeed = motorFL.getPower();
+            }else{
+                fetchedSpeed = -motorFL.getPower();
+            }
+
+            motorFR.setPower(-fetchedSpeed);
+            motorRL.setPower(-fetchedSpeed);
+            motorRR.setPower(fetchedSpeed);
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -298,7 +309,7 @@ public class FullMap {
         distance=0;
     }
 
-    public void rotate(String direction, double speed, double angle) {
+    public void rotate( double speed, double targetAngle) {
 
         motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -311,42 +322,48 @@ public class FullMap {
         heading = Math.floor(heading);
         heading = Range.clip(heading, -180.0, 180.0);
 
+        double delta = targetAngle - heading;
+        if(delta == 0){
+            return;
+        }
+
         //boolean beforeAngle = (direction.equals("cw") ? heading > angle | heading<angle);
 
-        if (direction.equals("cw") || direction.equals("clockwise")) {
-            while (Math.abs(heading) > angle) {
+        if (delta <= 0) {
+            while (Math.abs(heading) > targetAngle) {
 
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-
+                RobotLog.vv("bracketsources","heading = %.2f",heading);
                 motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
-
-                motorFR.setPower(-speed);
-                motorFL.setPower(speed);
-                motorRR.setPower(-speed);
-                motorRL.setPower(speed);
-
-            }
-        } else if (direction.equals("counterclockwise") || direction.equals("ccw")) {
-            while (heading < angle) {
-
-                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
-
-                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
                 motorFR.setPower(speed);
                 motorFL.setPower(-speed);
                 motorRR.setPower(speed);
                 motorRL.setPower(-speed);
+
+            }
+        } else {
+            while (heading < targetAngle) {
+
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                heading = AngleUnit.DEGREES.fromUnit(angles.angleUnit, angles.firstAngle);
+                RobotLog.vv("bracketsources","heading = %.2f",heading);
+
+                motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorRR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                motorFR.setPower(-speed);
+                motorFL.setPower(speed);
+                motorRR.setPower(-speed);
+                motorRL.setPower(speed);
             }
         }
 
@@ -503,5 +520,17 @@ public class FullMap {
         speed=0;
         distance=0;
     }
+    public void moveAtAnge(double Angle, double power){
+        new ElapsedTime();
+        double D1 = Math.sin(Angle - Math.PI/4);
+        double D2 = Math.sin(Angle + Math.PI/4);
+        motorFL.setPower(D1 * power);
+        motorFR.setPower(D2 * power);
+        motorRR.setPower(D1 * power);
+        motorRL.setPower(D2 * power);
+
+    }
+
+
 
 }

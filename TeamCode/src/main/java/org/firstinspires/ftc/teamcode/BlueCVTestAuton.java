@@ -1,16 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -31,8 +28,8 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "New CV Test", group="CV")
-public class OpenCVTestAuton extends LinearOpMode {
+@Autonomous(name= "Blue CV Side", group="CV")
+public class BlueCVTestAuton extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     FullMap robot = new FullMap();
@@ -79,7 +76,7 @@ public class OpenCVTestAuton extends LinearOpMode {
         //width, height
         //width = height in this case, because camera is in portrait mode.
 
-        robot.autonArm.setPosition(0.05);
+
 
         //"foundL and foundR" is for the foundation
         robot.foundL.setPosition(0.5);
@@ -117,20 +114,20 @@ public class OpenCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-            robot.strafe(DRIVE_SPEED,2800,0); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(0.8,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
 
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
-             // we have 5 seconds to read telemetry before the robot decides what it wants to do
+            // we have 5 seconds to read telemetry before the robot decides what it wants to do
 
             //robot.timeRotate(-0.25, 1);
 
-            if (position == 3) {
+            if (position == 2) {
                 //movement not required
             } else if (position == 1) {
                 robot.drive(DRIVE_SPEED, 600);
             } else {
-                robot.drive(DRIVE_SPEED, 400);
+                robot.drive(DRIVE_SPEED, -800);
             }
 
             telemetry.addData("STATUS", "CORRECTION COMPLETED");
@@ -156,40 +153,66 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("STATUS", "GRAB COMPLETED");
             telemetry.update();
 
-            robot.strafe(DRIVE_SPEED, -1000, 0);
+            robot.strafe(DRIVE_SPEED, -1050, 0);
 
             telemetry.addData("STATUS", "REVERSE COMPLETED");
             telemetry.update();
 
             sleep(1000);
-
-            robot.drive(0.9, 4800);
-
+            robot.rotate(0.4,0);
+            if(position==1) {
+                robot.drive(1, 5200);
+            }
+            else if(position == 2){
+                robot.drive(1, 5500);
+            }
+            else{
+                robot.drive(1, 6200);
+            }
             telemetry.addData("STATUS", "CROSSING COMPLETED");
             telemetry.update();
+            robot.rotate(0.4,0);
 
-            robot.strafe(0.8, 1600);
+            robot.strafe(0.8, 900);
+
 
             telemetry.addData("STATUS", "RETURN COMPLETED");
             telemetry.update();
 
             sleep(1000);
 
-            //push two foundation claws up
+            //drops the block
             robot.autonArm.setPosition(0.5);
             robot.autonClaw.setPosition(0);
-            robot.drive(0.7,1100);
+            sleep(1000);
+            robot.autonArm.setPosition(0);
+
+            //moves to far side of foundation
+            robot.drive(1,1000);
+
+
+            //align with foundation
+            robot.strafe(1, 100);
             robot.autonArm.setPosition(0.05);
+            //lowers foundation hooks
             robot.foundL.setPosition(0.95);
             robot.foundR.setPosition(0.95);
-            sleep(1000);
-            robot.rotate("cw",0.7,90);
+
+            robot.rotate(0.4,0);
+            robot.drive(0.7,700);
+
+            robot.drive(0.7,-400);
+            //robot.rotate("cw",0.7,90);
+            robot.strafe(0.9,-4600);
             robot.foundL.setPosition(0.2);
             robot.foundR.setPosition(0.2);
-
-            robot.strafe(DRIVE_SPEED,-5000,0);
-            
-            //robot.drive(DRIVE_SPEED, -6000);
+            robot.rotate(0.4,0);
+            //drive out from under the foundation
+            robot.drive(0.9, -2700);
+            //align with center of bridge
+            robot.strafe(0.7,2000);
+            //move under bridge
+            robot.drive(0.9, -1500);
 
         }
     }

@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -262,11 +263,13 @@ public class ExperimentalTeleOp extends LinearOpMode {
             clawOffset3 = Range.clip(clawOffset3, -0.5, 0.5);
 
             //player 2 controls claw with A and B
+            RobotLog.vv("bracketsources","FL = %.2f, FR = %.2f, RL = %.2f, RR = %.2f",powerFL,powerFR,powerRL,powerRR);
 
 
-            telemetry.addData("Status", "Speed: " + speed + "\n" +
-                    "Turn: " + newTurn + "        Strafe: " + newStrafe + "\n" +
-                    "Slide Power: " + "     intake Power: " + INTAKE_SPEED + "\n");
+            telemetry.addData("Motor Power FL", powerFL);
+            telemetry.addData("Motor Power FR", powerFR);
+            telemetry.addData("Motor Power RL", powerRL);
+            telemetry.addData("Motor Power RR", powerRR);
             telemetry.update();
         }
     }
