@@ -257,18 +257,21 @@ public class FullMap {
         motorRL.setTargetPosition(targetRL);
         motorRR.setTargetPosition(targetRR);
 
+
+
         // Sets motors to run to a given encoder value
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFL.setPower(Math.abs(speed));
+        motorFR.setPower(Math.abs(speed));
+        motorRL.setPower(Math.abs(speed));
+        motorRR.setPower(Math.abs(speed));
 
         // Motors are set to run at a certain speed until one reaches its target position
         while (motorFL.isBusy() && motorFR.isBusy() && motorRL.isBusy() && motorRR.isBusy()) {
-            motorFL.setPower(Math.abs(speed));
-            motorFR.setPower(Math.abs(speed));
-            motorRL.setPower(Math.abs(speed));
-            motorRR.setPower(Math.abs(speed));
+
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 /*
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
@@ -50,8 +51,7 @@ public class TestCode extends LinearOpMode {
         //sleep for 20 seconds
         sleep(2000);
         //set distance from -3000 to 2500 because st  uff flipped
-        drive(0.5,1500);
-
+robot.strafe(0.5,2500,0);
         sleep(250);
 
     }
@@ -74,16 +74,18 @@ public class TestCode extends LinearOpMode {
         targetFR = robot.motorFR.getCurrentPosition() + distance;
         targetRL = robot.motorRL.getCurrentPosition() + distance;
         targetRR = robot.motorRR.getCurrentPosition() + distance;
-        robot.motorFL.setTargetPosition(targetFL);
-        robot.motorFR.setTargetPosition(targetFR);
-        robot.motorRL.setTargetPosition(targetRL);
-        robot.motorRR.setTargetPosition(targetRR);
+
 
         // Sets motors to run to a given encoder value
         robot.motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorRL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorRR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.motorFL.setTargetPosition(targetFL);
+        robot.motorFR.setTargetPosition(targetFR);
+        robot.motorRL.setTargetPosition(targetRL);
+        robot.motorRR.setTargetPosition(targetRR);
 
         robot.motorFL.setPower(Math.abs(speed));
         robot.motorFR.setPower(Math.abs(speed));
@@ -102,6 +104,7 @@ public class TestCode extends LinearOpMode {
             telemetry.addData("Current", " "+robot.motorFL.getCurrentPosition() + " "+robot.motorFR.getCurrentPosition() + " "+robot.motorRL.getCurrentPosition() +" "+ robot.motorRR.getCurrentPosition());
             telemetry.addData("Target", " "+targetFL + " "+targetFR + " "+targetRL +" "+ targetRR);
             telemetry.update();
+            RobotLog.vv("BracketSources", "FL = %d, FR = %d, RL = %d, RR = %d", robot.motorFL.getCurrentPosition(), robot.motorFR.getCurrentPosition(), robot.motorRL.getCurrentPosition(), robot.motorRR.getCurrentPosition());
         }
 
         // The motors are shutdown when a motor gets to its target position

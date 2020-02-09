@@ -49,9 +49,9 @@ public class OpenCVTestAuton extends LinearOpMode {
     private static float offsetX = 0f/8f;//changing this moves the three rects and the three circles left or right, range : (-2, 2) not inclusive
     private static float offsetY = 0f/8f;//changing this moves the three rects and circles up or down, range: (-4, 4) not inclusive
 
-    private static float[] midPos = {4f/8f+offsetX, 4f/8f+offsetY};//0 = col, 1 = row
-    private static float[] leftPos = {2f/8f+offsetX, 4f/8f+offsetY};
-    private static float[] rightPos = {6f/8f+offsetX, 4f/8f+offsetY};
+    private static float[] midPos = {4f/8f+offsetX, 7f/16f+offsetY};//0 = col, 1 = row
+    private static float[] leftPos = {2f/8f+offsetX, 7f/16f+offsetY};
+    private static float[] rightPos = {6f/8f+offsetX, 7f/16f+offsetY};
     //moves all rectangles right or left by amount. units are in ratio to monitor
 
     private final int rows = 640;
@@ -117,18 +117,18 @@ public class OpenCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-            robot.strafe(DRIVE_SPEED,3400); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(DRIVE_SPEED,2800,0); //robot alignment is rotated, so "strafe" really just means drive towards blocks
 
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
-            sleep(1000); // we have 5 seconds to read telemetry before the robot decides what it wants to do
+             // we have 5 seconds to read telemetry before the robot decides what it wants to do
 
             //robot.timeRotate(-0.25, 1);
-            sleep(1000);
+
             if (position == 3) {
                 //movement not required
             } else if (position == 1) {
-                robot.drive(DRIVE_SPEED, 869);
+                robot.drive(DRIVE_SPEED, 600);
             } else {
                 robot.drive(DRIVE_SPEED, 400);
             }
@@ -139,9 +139,11 @@ public class OpenCVTestAuton extends LinearOpMode {
             robot.autonClaw.setPosition(0);
             sleep(1000);
 
-            robot.autonArm.setPosition(0.3);
 
-            sleep(1000);
+            robot.autonArm.setPosition(0.3);
+            sleep(500);
+
+
 
             robot.autonClaw.setPosition(0.7);
 
@@ -154,19 +156,19 @@ public class OpenCVTestAuton extends LinearOpMode {
             telemetry.addData("STATUS", "GRAB COMPLETED");
             telemetry.update();
 
-            robot.strafe(DRIVE_SPEED, -1400);
+            robot.strafe(DRIVE_SPEED, -1000, 0);
 
             telemetry.addData("STATUS", "REVERSE COMPLETED");
             telemetry.update();
 
             sleep(1000);
 
-            robot.drive(DRIVE_SPEED, 5500);
+            robot.drive(0.9, 4800);
 
             telemetry.addData("STATUS", "CROSSING COMPLETED");
             telemetry.update();
 
-            robot.strafe(DRIVE_SPEED, 1500);
+            robot.strafe(0.8, 1600);
 
             telemetry.addData("STATUS", "RETURN COMPLETED");
             telemetry.update();
@@ -174,12 +176,20 @@ public class OpenCVTestAuton extends LinearOpMode {
             sleep(1000);
 
             //push two foundation claws up
+            robot.autonArm.setPosition(0.5);
             robot.autonClaw.setPosition(0);
+            robot.drive(0.7,1100);
+            robot.autonArm.setPosition(0.05);
             robot.foundL.setPosition(0.95);
             robot.foundR.setPosition(0.95);
             sleep(1000);
+            robot.rotate("cw",0.7,90);
+            robot.foundL.setPosition(0.2);
+            robot.foundR.setPosition(0.2);
 
-            robot.strafe(DRIVE_SPEED,-3025);
+            robot.strafe(DRIVE_SPEED,-5000,0);
+            
+            //robot.drive(DRIVE_SPEED, -6000);
 
         }
     }
