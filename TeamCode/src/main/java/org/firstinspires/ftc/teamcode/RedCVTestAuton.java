@@ -114,7 +114,7 @@ public class RedCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-            robot.strafe(0.8,2575); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(0.8,2400); //robot alignment is rotated, so "strafe" really just means drive towards blocks
 
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
@@ -213,7 +213,7 @@ public class RedCVTestAuton extends LinearOpMode {
             //align with center of bridge
             robot.strafe(0.7,2500);
             //move under bridge
-            robot.drive(0.9, 1500);
+            robot.drive(0.9, 1200);
 
         }
     }
