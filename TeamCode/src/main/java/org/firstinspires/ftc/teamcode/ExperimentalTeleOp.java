@@ -96,7 +96,8 @@ public class ExperimentalTeleOp extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        // Start the logging of measured acceleration
+        // Start the logging of measured accelerati
+        // on
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         telemetry.addData("Status", "Robot can drive.");

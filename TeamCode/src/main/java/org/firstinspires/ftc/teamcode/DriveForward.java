@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 */
 
-@Autonomous(name="Drive Forward", group="autonomous")
+@Autonomous(name="Parking Code", group="autonomous")
 
 /* Declare OpMode members. */
 
@@ -61,11 +61,10 @@ public class DriveForward extends LinearOpMode {
 
         //clear claw for TeleOp
         //push two foundation claws up
-        robot.foundL.setPosition(0.95);
-        robot.foundR.setPosition(0.95);
+
         sleep(2000);
 
-        robot.strafe(DRIVE_SPEED, -2500);
+
 
     }
 }

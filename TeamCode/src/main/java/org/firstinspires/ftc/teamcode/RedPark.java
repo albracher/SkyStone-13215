@@ -28,8 +28,8 @@ import java.util.List;
  * monitor: 640 x 480
  *YES
  */
-@Autonomous(name= "Blue CV Side", group="CV")
-public class BlueCVTestAuton extends LinearOpMode {
+@Autonomous(name= "Badthing", group="CV")
+public class RedPark extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     FullMap robot = new FullMap();
@@ -114,7 +114,7 @@ public class BlueCVTestAuton extends LinearOpMode {
 
 
             phoneCam.closeCameraDevice();
-            robot.strafe(0.5,2700); //robot alignment is rotated, so "strafe" really just means drive towards blocks
+            robot.strafe(0.5,2500); //robot alignment is rotated, so "strafe" really just means drive towards blocks
 
             telemetry.addData("STATUS", "APPROACH COMPLETED"); // robot has driven up to the blocks
             telemetry.update();
@@ -127,7 +127,7 @@ public class BlueCVTestAuton extends LinearOpMode {
             } else if (position == 1) {
                 robot.drive(DRIVE_SPEED, 600);
             } else {
-                robot.drive(DRIVE_SPEED, -600);
+                robot.drive(DRIVE_SPEED, -800);
             }
 
             telemetry.addData("STATUS", "CORRECTION COMPLETED");
@@ -173,7 +173,7 @@ public class BlueCVTestAuton extends LinearOpMode {
             telemetry.update();
             robot.rotate(0.4,0);
 
-            robot.strafe(0.8, 800);
+            robot.strafe(0.8, 1700);
 
 
             telemetry.addData("STATUS", "RETURN COMPLETED");
@@ -204,14 +204,13 @@ public class BlueCVTestAuton extends LinearOpMode {
             robot.drive(0.7,-600);
             //robot.rotate("cw",0.7,90);
             robot.strafe(0.9,-5000);
-            robot.drive(0.9,700);
             robot.foundL.setPosition(0.2);
             robot.foundR.setPosition(0.2);
             robot.rotate(0.4,0);
             //drive out from under the foundation
             robot.drive(0.9, -2700);
             //align with center of bridge
-            robot.strafe(0.7,1800);
+            robot.strafe(0.7,2000);
             //move under bridge
             robot.drive(0.9, -1200);
 
